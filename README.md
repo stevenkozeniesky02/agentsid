@@ -1,22 +1,84 @@
-# AgentsID
+<p align="center">
+  <img src="https://agentsid.dev/favicon.svg" width="60" alt="AgentsID" />
+</p>
 
-Identity and auth for AI agents.
+<h1 align="center">AgentsID</h1>
 
-Official SDKs and CLI for [agentsid.dev](https://agentsid.dev).
+<p align="center">
+  <strong>Identity, permissions, and audit for AI agents.</strong>
+  <br />
+  The Auth0 for the agent economy.
+</p>
 
-## SDKs
+<p align="center">
+  <a href="https://www.npmjs.com/package/@agentsid/sdk"><img src="https://img.shields.io/npm/v/@agentsid/sdk?style=flat-square&color=7c5bf0&label=npm" alt="npm" /></a>
+  <a href="https://pypi.org/project/agentsid/"><img src="https://img.shields.io/pypi/v/agentsid?style=flat-square&color=7c5bf0&label=pypi" alt="pypi" /></a>
+  <a href="https://rubygems.org/gems/agentsid"><img src="https://img.shields.io/gem/v/agentsid?style=flat-square&color=7c5bf0&label=gem" alt="gem" /></a>
+  <a href="https://agentsid.dev"><img src="https://img.shields.io/badge/website-agentsid.dev-7c5bf0?style=flat-square" alt="website" /></a>
+  <a href="https://github.com/stevenkozeniesky02/agentsid/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-7c5bf0?style=flat-square" alt="license" /></a>
+</p>
 
-| Language | Package | Install |
-|----------|---------|---------|
-| TypeScript | [`@agentsid/sdk`](https://www.npmjs.com/package/@agentsid/sdk) | `npm install @agentsid/sdk` |
-| Python | `agentsid` | `pip install agentsid` |
-| Ruby | `agentsid` | `gem install agentsid` |
-| Java | `dev.agentsid:agentsid-sdk` | Maven/Gradle |
+<p align="center">
+  <a href="https://agentsid.dev/docs">Docs</a> &middot;
+  <a href="https://agentsid.dev/guides">Guides</a> &middot;
+  <a href="https://agentsid.dev/dashboard">Dashboard</a> &middot;
+  <a href="https://agentsid.dev/docs#api-reference">API Reference</a>
+</p>
+
+---
+
+## The Problem
+
+AI agents are accessing databases, sending emails, calling APIs, and making purchases -- but there is no standard way to identify them, limit what they can do, or trace their actions back to a human.
+
+- **88%** of MCP servers need authentication, but only **8.5%** use OAuth
+- **53%** rely on static API keys passed as environment variables
+- **80%** of organizations cannot tell what their agents are doing in real-time
+
+Auth0 handles humans. **AgentsID handles agents.**
+
+## How It Works
+
+```
+┌─────────────────────────────────────────────────────┐
+│  Your App                                           │
+│                                                     │
+│  ┌───────────┐  ┌───────────┐  ┌────────────────┐  │
+│  │ Agent A   │  │ Agent B   │  │ MCP Server     │  │
+│  │ (token)   │  │ (token)   │  │ + middleware    │  │
+│  └─────┬─────┘  └─────┬─────┘  └───────┬────────┘  │
+│        │              │                │            │
+└────────┼──────────────┼────────────────┼────────────┘
+         │              │                │
+         └──────────────┼────────────────┘
+                        │
+                        ▼
+              ┌─────────────────┐
+              │   AgentsID API  │
+              │                 │
+              │  Identity       │  Register, issue tokens
+              │  Permissions    │  Per-tool deny-first rules
+              │  Delegation     │  Human → Agent → Agent
+              │  Audit          │  Tamper-evident hash chain
+              └─────────────────┘
+```
+
+**Every tool call flows through AgentsID.** The middleware validates the agent's token, checks permissions against deny-first rules, and logs the result to a tamper-evident audit chain -- all in under 1ms.
 
 ## Quick Start
 
+### Install
+
+```bash
+npm install @agentsid/sdk    # TypeScript
+pip install agentsid          # Python
+gem install agentsid          # Ruby
+```
+
+### Register an agent
+
 ```typescript
-import { AgentsID, createHttpMiddleware } from '@agentsid/sdk';
+import { AgentsID } from '@agentsid/sdk';
 
 const aid = new AgentsID({ projectKey: 'aid_proj_...' });
 
@@ -25,86 +87,132 @@ const { agent, token } = await aid.registerAgent({
   onBehalfOf: 'user_123',
   permissions: ['search_*', 'save_memory'],
 });
+```
 
-// Validate every tool call
-const middleware = createHttpMiddleware({ projectKey: 'aid_proj_...' });
-const allowed = await middleware.isAllowed(token, 'save_memory'); // true
+### Validate every tool call
+
+```typescript
+const result = await aid.validate(token, 'delete_user');
+
+if (!result.allowed) {
+  console.log('Blocked:', result.reason);
+  // → "Tool 'delete_user' is not in the allow list"
+}
+```
+
+### Add MCP middleware (2 lines)
+
+```typescript
+import { createHttpMiddleware } from '@agentsid/sdk';
+
+const guard = createHttpMiddleware({ projectKey: 'aid_proj_...' });
+// That's it. Every tool call is now validated.
 ```
 
 ## Features
 
-### Advanced Permissions
+### Deny-First Permissions
 
-Fine-grained permission rules with optional advanced controls:
-
-- **Schedule** -- restrict tool access to specific hours and days (e.g., business hours only)
-- **Rate Limits** -- sliding-window rate limiting per tool per agent (e.g., 10 calls/minute)
-- **Data Classification** -- restrict access by data level (`public`, `internal`, `confidential`)
-- **Approval Gates** -- flag sensitive actions for human approval before execution
+Every tool call is blocked unless explicitly allowed. Fine-grained rules with wildcards, conditions, schedules, and rate limits.
 
 ```typescript
 await aid.setPermissions(agentId, [
-  {
-    toolPattern: 'deploy_*',
-    action: 'allow',
-    schedule: { hoursStart: 9, hoursEnd: 17, timezone: 'US/Pacific', days: ['mon', 'tue', 'wed', 'thu', 'fri'] },
-    rateLimit: { max: 5, per: 'hour' },
-  },
-  {
-    toolPattern: 'delete_*',
-    action: 'allow',
-    requiresApproval: true,
-  },
+  { toolPattern: 'search_*', action: 'allow' },
+  { toolPattern: 'deploy_*', action: 'allow',
+    schedule: { hoursStart: 9, hoursEnd: 17, timezone: 'US/Pacific' },
+    rateLimit: { max: 5, per: 'hour' } },
+  { toolPattern: 'delete_*', action: 'allow', requiresApproval: true },
 ]);
 ```
 
-### Approval Workflow
+### HMAC-SHA256 Tokens
 
-Human-in-the-loop authorization for sensitive agent actions. When a permission rule has `requires_approval: true`, matching tool calls are held for human review.
+Cryptographically signed agent tokens verified without a database call. Supports key rotation with zero downtime.
+
+### Delegation Chains
+
+Every agent action traces back to a human. Multi-hop delegation (Human → Agent A → Agent B) with automatic scope narrowing -- child agents can never have more permissions than their parent.
+
+### Tamper-Evident Audit
+
+SHA-256 hash chain links every event. If anyone modifies a record, the chain breaks. Queryable by agent, tool, action, and time range. Exportable for compliance.
+
+### Approval Gates
+
+Sensitive actions pause for human approval. Email notifications, webhook triggers, time-boxed decisions.
 
 ```typescript
-// List pending approvals
 const pending = await aid.listApprovals();
-
-// Approve or reject
 await aid.approve(approvalId, { decidedBy: 'admin@example.com' });
-await aid.reject(approvalId, { decidedBy: 'admin@example.com', reason: 'Not authorized' });
 ```
 
 ### Webhooks
 
-Subscribe to real-time event notifications via HTTP POST:
+Real-time event notifications for 8 event types:
 
-- `agent.created`, `agent.revoked`, `agent.denied`
-- `limit.approaching`, `limit.reached`
-- `approval.requested`, `approval.decided`
-- `chain.broken` (audit integrity failure)
+`agent.created` · `agent.revoked` · `agent.denied` · `limit.approaching` · `limit.reached` · `approval.requested` · `approval.decided` · `chain.broken`
 
-```typescript
-await aid.createWebhook({
-  name: 'slack-alerts',
-  url: 'https://hooks.slack.com/services/T00/B00/xxx',
-  events: ['agent.denied', 'approval.requested'],
-});
-```
+## SDKs
 
-### Usage Tracking
+| Language | Package | Install |
+|----------|---------|---------|
+| **TypeScript** | [`@agentsid/sdk`](https://www.npmjs.com/package/@agentsid/sdk) | `npm install @agentsid/sdk` |
+| **Python** | [`agentsid`](https://pypi.org/project/agentsid/) | `pip install agentsid` |
+| **Ruby** | [`agentsid`](https://rubygems.org/gems/agentsid) | `gem install agentsid` |
+| **Java** | `dev.agentsid:agentsid-sdk` | Maven / Gradle |
 
-Monitor current usage against plan limits:
+## CLI
 
-```typescript
-const usage = await aid.getUsage();
-// { events_this_month: 1200, events_limit: 10000, agents_active: 5, agents_limit: 25, plan: 'free' }
+```bash
+npx agentsid init                           # Create project, get API key
+npx agentsid register-agent --name "bot"    # Register an agent
+npx agentsid list-agents                    # List all agents
+npx agentsid audit --agent <id>             # View audit log
+npx agentsid revoke <id>                    # Revoke an agent
 ```
 
 ## Documentation
 
-- **Website:** [agentsid.dev](https://agentsid.dev)
-- **Docs:** [agentsid.dev/docs](https://agentsid.dev/docs)
-- **API Reference:** [docs/API.md](docs/API.md)
-- **Dashboard:** [agentsid.dev/dashboard](https://agentsid.dev/dashboard)
+| Resource | Link |
+|----------|------|
+| Website | [agentsid.dev](https://agentsid.dev) |
+| Documentation | [agentsid.dev/docs](https://agentsid.dev/docs) |
+| Setup Guides | [agentsid.dev/guides](https://agentsid.dev/guides) |
+| Dashboard | [agentsid.dev/dashboard](https://agentsid.dev/dashboard) |
+| API Reference | [docs/API.md](docs/API.md) |
+| Security Model | [docs/SECURITY.md](docs/SECURITY.md) |
+
+## Self-Hosting
+
+AgentsID is a single FastAPI application backed by PostgreSQL.
+
+```bash
+git clone https://github.com/stevenkozeniesky02/agentsid.git
+cd agentsid/server
+cp .env.example .env  # set DATABASE_URL and SIGNING_SECRET
+pip install -e .
+uvicorn src.app:app --host 0.0.0.0 --port 8000
+```
+
+Or with Docker:
+
+```bash
+docker build -t agentsid .
+docker run -p 8000:8000 --env-file .env agentsid
+```
+
+## Why AgentsID
+
+| | Auth0 | Microsoft Entra | AgentsID |
+|---|---|---|---|
+| Agent-to-agent auth | No | Preview only | Yes |
+| MCP native | No | No | Yes |
+| Per-tool permissions | No | No | Yes |
+| Delegation chains | No | Limited | Yes |
+| Self-hostable | No | No | Yes |
+| Developer-first | Complex | Azure-locked | 3 lines of code |
+| Pricing | Expensive at scale | Enterprise only | Free tier + usage-based |
 
 ## License
 
-MIT
-
+[MIT](LICENSE)
