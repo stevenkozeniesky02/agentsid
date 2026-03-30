@@ -1,5 +1,5 @@
 import { type ReactNode, useState, useEffect } from "react";
-import { Book, ExternalLink, FileText, LayoutDashboard, Menu, Shield, Zap } from "lucide-react";
+import { Book, ExternalLink, FileText, LayoutDashboard, Menu, Shield, Trophy, Zap } from "lucide-react";
 
 import {
   Accordion,
@@ -97,6 +97,12 @@ const Navbar = ({
       url: "#",
       items: [
         {
+          title: "Hall of MCPs",
+          description: "Security grades for 100+ MCP servers",
+          icon: <Trophy className="size-5 shrink-0" />,
+          url: "/hall-of-mcps",
+        },
+        {
           title: "Quick Start",
           description: "Get up and running in under 5 minutes",
           icon: <Zap className="size-5 shrink-0" />,
@@ -125,6 +131,7 @@ const Navbar = ({
     },
     { title: "Docs", url: "/docs" },
     { title: "Guides", url: "/guides" },
+    { title: "Hall of MCPs", url: "/hall-of-mcps" },
     { title: "Spec", url: "/spec" },
     { title: "Blog", url: "/blog" },
   ],

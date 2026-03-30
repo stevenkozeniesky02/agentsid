@@ -14,6 +14,7 @@ const Privacy = lazy(() => import("@/pages/privacy").then((m) => ({ default: m.P
 const Blog = lazy(() => import("@/pages/blog").then((m) => ({ default: m.Blog })));
 const BlogPost = lazy(() => import("@/pages/blog-post").then((m) => ({ default: m.BlogPost })));
 const Spec = lazy(() => import("@/pages/spec").then((m) => ({ default: m.Spec })));
+const HallOfMcps = lazy(() => import("@/pages/hall-of-mcps").then((m) => ({ default: m.HallOfMcps })));
 const NotFound = lazy(() => import("@/pages/not-found").then((m) => ({ default: m.NotFound })));
 
 function PageLoader() {
@@ -45,6 +46,7 @@ function App() {
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="/spec" element={<Spec />} />
+                <Route path="/hall-of-mcps" element={<HallOfMcps />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
