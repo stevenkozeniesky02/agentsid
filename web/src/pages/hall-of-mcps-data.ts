@@ -23,7 +23,7 @@ export interface HallServer {
   readonly findings: { readonly high: number; readonly medium: number; readonly low: number };
   readonly riskTags: readonly string[];
   readonly topFindings: readonly HallFinding[];
-  readonly mapPolicy: string | null;
+  readonly mapPolicy: { readonly version: string; readonly rules: readonly Record<string, unknown>[] } | null;
   readonly scannedAt: string;
 }
 
@@ -94,7 +94,194 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`create-note` has no description — LLM infers behavior from the name alone, unpredictable invocation"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create-note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update-note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete-note\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create-folder\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete-folder\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create-note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search-notes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-note-content\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-note-by-id\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-note-details\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update-note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete-note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"move-note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list-notes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list-folders\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create-folder\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete-folder\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list-attachments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"batch-move-notes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-note-markdown\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-checklist-state\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create-note",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update-note",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete-note",
+          "action": "deny"
+        },
+        {
+          "tool": "create-folder",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete-folder",
+          "action": "deny"
+        },
+        {
+          "tool": "create-note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search-notes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-note-content",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-note-by-id",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-note-details",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update-note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete-note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "move-note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list-notes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list-folders",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create-folder",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete-folder",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list-attachments",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "batch-move-notes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-note-markdown",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-checklist-state",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:26:08.990Z"
   },
   {
@@ -151,7 +338,556 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`get_bill` can trigger financial operations — no spend limit or approval gate"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"qbo_authenticate\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_journal_entry\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_bill\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"budget\": {\n          \"maxUsd\": 10\n        }\n      }\n    },\n    {\n      \"tool\": \"create_bill\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"get_bill\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"budget\": {\n          \"maxUsd\": 10\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_bill\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"budget\": {\n          \"maxUsd\": 10\n        }\n      }\n    },\n    {\n      \"tool\": \"create_expense\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_sales_receipt\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_invoice\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"budget\": {\n          \"maxUsd\": 10\n        }\n      }\n    },\n    {\n      \"tool\": \"create_invoice\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"get_invoice\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"budget\": {\n          \"maxUsd\": 10\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_invoice\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"budget\": {\n          \"maxUsd\": 10\n        }\n      }\n    },\n    {\n      \"tool\": \"create_deposit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_vendor_credit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_entity\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_customer\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"qbo_authenticate\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"query\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_accounts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_profit_loss\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_balance_sheet\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_trial_balance\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"query_account_transactions\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"account_period_summary\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_journal_entry\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_journal_entry\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_journal_entry\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_bill\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_bill\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_bill\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_expense\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_expense\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_expense\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_sales_receipt\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_sales_receipt\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_sales_receipt\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_invoice\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_invoice\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_invoice\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_deposit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_deposit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_deposit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_vendor_credit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_vendor_credit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_vendor_credit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_entity\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_customer\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_customer\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_customer\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"query\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"list_accounts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"account_period_summary\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"create_journal_entry\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_journal_entry\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_bill\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_expense\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_sales_receipt\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"create_sales_receipt\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"create_deposit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_deposit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"create_vendor_credit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_vendor_credit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"create_customer\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"edit_customer\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "qbo_authenticate",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_journal_entry",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_bill",
+          "action": "allow",
+          "where": {
+            "budget": {
+              "maxUsd": 10
+            }
+          }
+        },
+        {
+          "tool": "create_bill",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "get_bill",
+          "action": "allow",
+          "where": {
+            "budget": {
+              "maxUsd": 10
+            }
+          }
+        },
+        {
+          "tool": "edit_bill",
+          "action": "allow",
+          "where": {
+            "budget": {
+              "maxUsd": 10
+            }
+          }
+        },
+        {
+          "tool": "create_expense",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_sales_receipt",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_invoice",
+          "action": "allow",
+          "where": {
+            "budget": {
+              "maxUsd": 10
+            }
+          }
+        },
+        {
+          "tool": "create_invoice",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "get_invoice",
+          "action": "allow",
+          "where": {
+            "budget": {
+              "maxUsd": 10
+            }
+          }
+        },
+        {
+          "tool": "edit_invoice",
+          "action": "allow",
+          "where": {
+            "budget": {
+              "maxUsd": 10
+            }
+          }
+        },
+        {
+          "tool": "create_deposit",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_vendor_credit",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_entity",
+          "action": "deny"
+        },
+        {
+          "tool": "create_customer",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "qbo_authenticate",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "query",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_accounts",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_profit_loss",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_balance_sheet",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_trial_balance",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "query_account_transactions",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "account_period_summary",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_journal_entry",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_journal_entry",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "edit_journal_entry",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_bill",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_bill",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "edit_bill",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_expense",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "edit_expense",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_expense",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_sales_receipt",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "edit_sales_receipt",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_sales_receipt",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_invoice",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_invoice",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "edit_invoice",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_deposit",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_deposit",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "edit_deposit",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_vendor_credit",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_vendor_credit",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "edit_vendor_credit",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_entity",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_customer",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_customer",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "edit_customer",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "query",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "list_accounts",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "account_period_summary",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "create_journal_entry",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_journal_entry",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_bill",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_expense",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_sales_receipt",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "create_sales_receipt",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "create_deposit",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_deposit",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "create_vendor_credit",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_vendor_credit",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "create_customer",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "edit_customer",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T14:57:11.693Z"
   },
   {
@@ -206,7 +942,692 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`delete_contact` can permanently delete data — no guardrails, no confirmation required"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"update_automation_settings\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_automation_step\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_automation\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_email_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_email_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_email_list\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_contact_with_lists\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_custom_field\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_custom_field\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_custom_field\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_sender\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_contact\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"remove_contact_from_lists\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"update_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_sender\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"update_segment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_segment\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"send_mail\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_template\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_template\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_template\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_template_version\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_template_version\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_template_version\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_html_template\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"get_automation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_automation_settings\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_automation_step\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_automation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"open_automation_editor\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"open_single_send_stats\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_email_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_email_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_email_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_custom_field\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_custom_field\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_custom_field\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_sender\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"remove_contact_from_lists\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_contacts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_contacts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_sender\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_segment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_segment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"send_mail\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_global_stats\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_stats_by_browser\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_stats_by_client_type\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_stats_by_device_type\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_stats_by_country\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_stats_by_mailbox_provider\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_category_stats\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_subuser_stats\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_stats_overview\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_templates\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_template\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_template\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_template\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_template\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_template_version\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_template_version\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_template_version\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_template_version\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_html_template\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"open_template_editor\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_automation_settings\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"list_email_lists\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"create_email_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"update_email_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"delete_email_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"create_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"send_mail\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_scopes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_global_stats\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_stats_by_browser\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_stats_by_client_type\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_stats_by_device_type\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_stats_by_country\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_stats_by_mailbox_provider\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_stats_overview\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"create_template_version\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"update_template_version\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "update_automation_settings",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_automation_step",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_automation",
+          "action": "deny"
+        },
+        {
+          "tool": "create_email_list",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_email_list",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_email_list",
+          "action": "deny"
+        },
+        {
+          "tool": "create_contact",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_contact_with_lists",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_custom_field",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_custom_field",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_custom_field",
+          "action": "deny"
+        },
+        {
+          "tool": "create_sender",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_contact",
+          "action": "deny"
+        },
+        {
+          "tool": "remove_contact_from_lists",
+          "action": "deny"
+        },
+        {
+          "tool": "update_contact",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_sender",
+          "action": "deny"
+        },
+        {
+          "tool": "update_segment",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_segment",
+          "action": "deny"
+        },
+        {
+          "tool": "send_mail",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "create_template",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_template",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_template",
+          "action": "deny"
+        },
+        {
+          "tool": "create_template_version",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_template_version",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_template_version",
+          "action": "deny"
+        },
+        {
+          "tool": "create_html_template",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "get_automation",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_automation_settings",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_automation_step",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_automation",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "open_automation_editor",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "open_single_send_stats",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_email_list",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_email_list",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_email_list",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_custom_field",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_custom_field",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_custom_field",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_sender",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "remove_contact_from_lists",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_contact",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_contacts",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_contacts",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_sender",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_segment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_segment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "send_mail",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_global_stats",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_stats_by_browser",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_stats_by_client_type",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_stats_by_device_type",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_stats_by_country",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_stats_by_mailbox_provider",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_category_stats",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_subuser_stats",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_stats_overview",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_templates",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_template",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_template",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_template",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_template",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_template_version",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_template_version",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_template_version",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_template_version",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_html_template",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "open_template_editor",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_automation_settings",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "list_email_lists",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "create_email_list",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "update_email_list",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "delete_email_list",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "create_contact",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "send_mail",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_scopes",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_global_stats",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_stats_by_browser",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_stats_by_client_type",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_stats_by_device_type",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_stats_by_country",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_stats_by_mailbox_provider",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_stats_overview",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "create_template_version",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "update_template_version",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T14:52:25.339Z"
   },
   {
@@ -261,7 +1682,589 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`remove_send_password` can permanently delete data — no guardrails, no confirmation required"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_item\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_folder\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_org_collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_text_send\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_file_send\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_send\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"remove_send_password\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"remove_send_password\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_org_collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_org_collection\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"update_org_member\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_org_member_groups\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"remove_org_member\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_org_group\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_org_group\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_org_group\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"update_org_group_members\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_org_policy\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_org_subscription\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"generate\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_item\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_folder\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_item\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_folder\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"confirm\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_org_collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_org_collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_item_collections\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"move\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"device_approval_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"device_approval_approve\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"device_approval_approve_all\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"device_approval_deny\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"device_approval_deny_all\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"restore\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_text_send\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_file_send\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_send\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_send\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_send\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"remove_send_password\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_org_collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_org_collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_org_collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_org_member\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_org_member_groups\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_org_member\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_org_member_groups\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"remove_org_member\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"reinvite_org_member\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"revoke_org_member\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"restore_org_member\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_org_group\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_org_group_members\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_org_group\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_org_group\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_org_group_members\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_org_events\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"sync\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"create_file_send\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"create_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"update_org_subscription\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_item",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_folder",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete",
+          "action": "deny"
+        },
+        {
+          "tool": "create_org_collection",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_text_send",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_file_send",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_send",
+          "action": "deny"
+        },
+        {
+          "tool": "remove_send_password",
+          "action": "deny"
+        },
+        {
+          "tool": "remove_send_password",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_attachment",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_org_collection",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_org_collection",
+          "action": "deny"
+        },
+        {
+          "tool": "update_org_member",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_org_member_groups",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "remove_org_member",
+          "action": "deny"
+        },
+        {
+          "tool": "create_org_group",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_org_group",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_org_group",
+          "action": "deny"
+        },
+        {
+          "tool": "update_org_group_members",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_org_policy",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_org_subscription",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "list",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "generate",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_item",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_folder",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "edit_item",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "edit_folder",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "confirm",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_org_collection",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "edit_org_collection",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "edit_item_collections",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "move",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "device_approval_list",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "device_approval_approve",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "device_approval_approve_all",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "device_approval_deny",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "device_approval_deny_all",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "restore",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_text_send",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_file_send",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_send",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "edit_send",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_send",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "remove_send_password",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_attachment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_org_collection",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_org_collection",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_org_collection",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_org_member",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_org_member_groups",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_org_member",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_org_member_groups",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "remove_org_member",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "reinvite_org_member",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "revoke_org_member",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "restore_org_member",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_org_group",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_org_group_members",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_org_group",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_org_group",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_org_group_members",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_org_events",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "sync",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "create_file_send",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "create_attachment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "update_org_subscription",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:20:23.786Z"
   },
   {
@@ -314,7 +2317,103 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`runSEOAudit` executes arbitrary code with no scope restriction or allowlist"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"wipeLogs\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"runAccessibilityAudit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"runPerformanceAudit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"runSEOAudit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"runNextJSAudit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"runDebuggerMode\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"runAuditMode\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"runBestPracticesAudit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"getNetworkErrors\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"getNetworkLogs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "wipeLogs",
+          "action": "deny"
+        },
+        {
+          "tool": "runAccessibilityAudit",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "runPerformanceAudit",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "runSEOAudit",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "runNextJSAudit",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "runDebuggerMode",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "runAuditMode",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "runBestPracticesAudit",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "getNetworkErrors",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "getNetworkLogs",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:47:24.655Z"
   },
   {
@@ -368,7 +2467,283 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`auth_refresh_token` accesses credentials with no scope or audience restriction"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"auth_get_authorization_url\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"auth_exchange_code\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"auth_status\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"auth_refresh_token\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"auth_logout\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_project\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_project\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_project\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_task\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_task\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_task\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"auth_exchange_code\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_projects\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_project\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_project_by_id\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_project\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_project\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_project\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_tasks_in_project\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_task\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_task\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"complete_task\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_task\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_task\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_tasks_due_soon\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_tasks\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_high_priority_tasks\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"auth_exchange_code\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"auth_status\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"auth_logout\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_user\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"search_tasks\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "auth_get_authorization_url",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "auth_exchange_code",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "auth_status",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "auth_refresh_token",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "auth_logout",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_project",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_project",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_project",
+          "action": "deny"
+        },
+        {
+          "tool": "create_task",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_task",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_task",
+          "action": "deny"
+        },
+        {
+          "tool": "auth_exchange_code",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_projects",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_project",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_project_by_id",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_project",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_project",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_project",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_tasks_in_project",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_task",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_task",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "complete_task",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_task",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_task",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_tasks_due_soon",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_tasks",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_high_priority_tasks",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "auth_exchange_code",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "auth_status",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "auth_logout",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_user",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "search_tasks",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T16:35:49.293Z"
   },
   {
@@ -419,7 +2794,42 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`linkedin_check_auth` has no description — LLM infers behavior from the name alone, unpredictable invocation"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"linkedin_check_auth\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"linkedin_callback\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linkedin_create_post\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "linkedin_check_auth",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "linkedin_callback",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linkedin_create_post",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:22:32.034Z"
   },
   {
@@ -471,7 +2881,64 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`jira_post` response may leak secrets or API keys based on tool description"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"jira_delete\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"jira_get\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"jira_post\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"jira_put\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"jira_patch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"jira_delete\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "jira_delete",
+          "action": "deny"
+        },
+        {
+          "tool": "jira_get",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "jira_post",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "jira_put",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "jira_patch",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "jira_delete",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:08:00.050Z"
   },
   {
@@ -519,7 +2986,60 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`control_device` has no description — LLM infers behavior from the name alone, unpredictable invocation"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"list_devices\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"control_device\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"turn_on\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"turn_off\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_state\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "list_devices",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "control_device",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "turn_on",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "turn_off",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_state",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:20:51.110Z"
   },
   {
@@ -573,7 +3093,396 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`delete_tag` can permanently delete data — no guardrails, no confirmation required"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_notebook\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_notebook\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_notebook\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_note\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"remove_tags_from_note\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"delete_tag\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"update_resource\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_resource\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"list_notebooks\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_notebook\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_notebook_notes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_notebook\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_notebook\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_notebook_by_id\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"move_note_to_notebook\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_all_notes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_notes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"append_to_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"prepend_to_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"add_tags_to_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"remove_tags_from_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_tags\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"rename_tag\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_tag\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_tag_by_id\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_notes_by_tag\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_all_resources\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_resource_metadata\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_note_attachments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_resource_notes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"download_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"upload_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_resource\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_resource\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_all_revisions\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_revision\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_all_resources\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"download_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"upload_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"update_resource\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_notebook",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_notebook",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_notebook",
+          "action": "deny"
+        },
+        {
+          "tool": "create_note",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_note",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_note",
+          "action": "deny"
+        },
+        {
+          "tool": "remove_tags_from_note",
+          "action": "deny"
+        },
+        {
+          "tool": "delete_tag",
+          "action": "deny"
+        },
+        {
+          "tool": "update_resource",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_resource",
+          "action": "deny"
+        },
+        {
+          "tool": "list_notebooks",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_notebook",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_notebook_notes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_notebook",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_notebook",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_notebook_by_id",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "move_note_to_notebook",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_all_notes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_notes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "append_to_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "prepend_to_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "add_tags_to_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "remove_tags_from_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_tags",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "rename_tag",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_tag",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_tag_by_id",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_notes_by_tag",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_all_resources",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_resource_metadata",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_note_attachments",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_resource_notes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "download_attachment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "upload_attachment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_resource",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_resource",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_all_revisions",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_revision",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_all_resources",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "download_attachment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "upload_attachment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "update_resource",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:26:09.557Z"
   },
   {
@@ -627,7 +3536,551 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`delete_ticket` can permanently delete data — no guardrails, no confirmation required"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_contact\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_company\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_company\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_company\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_deal\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_deal\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_deal\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_ticket\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_ticket\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_ticket\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_association\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_association\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_task\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_call\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_meeting\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_meeting\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"list_contacts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_contacts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_companies\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_company\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_company\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_company\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_company\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_companies\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_deals\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_deal\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_deal\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_deal\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_deal\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_deals\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_tickets\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_ticket\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_ticket\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_ticket\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_ticket\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_tickets\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_pipeline\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_associations\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_association\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_association\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_property\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_owners\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_owner\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_notes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_tasks\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_task\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_calls\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_call\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_emails\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_meetings\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_meeting\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_meeting\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"list_owners\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"list_emails\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_contact",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_contact",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_contact",
+          "action": "deny"
+        },
+        {
+          "tool": "create_company",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_company",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_company",
+          "action": "deny"
+        },
+        {
+          "tool": "create_deal",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_deal",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_deal",
+          "action": "deny"
+        },
+        {
+          "tool": "create_ticket",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_ticket",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_ticket",
+          "action": "deny"
+        },
+        {
+          "tool": "create_association",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_association",
+          "action": "deny"
+        },
+        {
+          "tool": "create_note",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_task",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_call",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_meeting",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_meeting",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "list_contacts",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_contact",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_contact",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_contact",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_contact",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_contacts",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_companies",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_company",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_company",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_company",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_company",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_companies",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_deals",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_deal",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_deal",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_deal",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_deal",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_deals",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_tickets",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_ticket",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_ticket",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_ticket",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_ticket",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_tickets",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_pipeline",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_associations",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_association",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_association",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_property",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_owners",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_owner",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_notes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_tasks",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_task",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_calls",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_call",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_emails",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_meetings",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_meeting",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_meeting",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_contact",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "list_owners",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "list_emails",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:01:22.677Z"
   },
   {
@@ -681,7 +4134,551 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`delete_ticket` can permanently delete data — no guardrails, no confirmation required"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_contact\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_company\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_company\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_company\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_deal\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_deal\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_deal\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_ticket\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_ticket\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_ticket\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_association\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_association\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_task\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_call\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_meeting\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_meeting\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"list_contacts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_contacts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_companies\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_company\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_company\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_company\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_company\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_companies\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_deals\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_deal\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_deal\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_deal\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_deal\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_deals\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_tickets\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_ticket\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_ticket\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_ticket\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_ticket\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_tickets\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_pipeline\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_associations\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_association\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_association\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_property\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_owners\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_owner\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_notes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_tasks\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_task\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_calls\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_call\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_emails\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_meetings\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_meeting\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_meeting\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_contact\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"list_owners\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"list_emails\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_contact",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_contact",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_contact",
+          "action": "deny"
+        },
+        {
+          "tool": "create_company",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_company",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_company",
+          "action": "deny"
+        },
+        {
+          "tool": "create_deal",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_deal",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_deal",
+          "action": "deny"
+        },
+        {
+          "tool": "create_ticket",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_ticket",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_ticket",
+          "action": "deny"
+        },
+        {
+          "tool": "create_association",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_association",
+          "action": "deny"
+        },
+        {
+          "tool": "create_note",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_task",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_call",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_meeting",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_meeting",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "list_contacts",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_contact",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_contact",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_contact",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_contact",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_contacts",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_companies",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_company",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_company",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_company",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_company",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_companies",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_deals",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_deal",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_deal",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_deal",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_deal",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_deals",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_tickets",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_ticket",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_ticket",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_ticket",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_ticket",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_tickets",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_pipeline",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_associations",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_association",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_association",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_property",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_owners",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_owner",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_notes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_tasks",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_task",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_calls",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_call",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_emails",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_meetings",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_meeting",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_meeting",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_contact",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "list_owners",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "list_emails",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:13:35.108Z"
   },
   {
@@ -734,7 +4731,356 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`drop-index` can permanently delete data — no guardrails, no confirmation required"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create-collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create-index\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete-many\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"drop-collection\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"drop-database\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"drop-index\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"insert-many\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update-many\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"aggregate\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"collection-indexes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"collection-schema\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"collection-storage-size\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"connect\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"count\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create-collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create-index\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"db-stats\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete-many\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"drop-collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"drop-database\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"drop-index\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"explain\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"export\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"find\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"insert-many\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list-collections\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"rename-collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update-many\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"atlas-local-create-deployment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search-knowledge\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"connect\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"create-collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"db-stats\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"drop-collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"drop-database\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"drop-index\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"list-collections\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"list-databases\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"rename-collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"atlas-local-connect-deployment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"atlas-local-create-deployment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"atlas-local-delete-deployment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"atlas-local-list-deployments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create-collection",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create-index",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete-many",
+          "action": "deny"
+        },
+        {
+          "tool": "drop-collection",
+          "action": "deny"
+        },
+        {
+          "tool": "drop-database",
+          "action": "deny"
+        },
+        {
+          "tool": "drop-index",
+          "action": "deny"
+        },
+        {
+          "tool": "insert-many",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update-many",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "aggregate",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "collection-indexes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "collection-schema",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "collection-storage-size",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "connect",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "count",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create-collection",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create-index",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "db-stats",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete-many",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "drop-collection",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "drop-database",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "drop-index",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "explain",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "export",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "find",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "insert-many",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list-collections",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "rename-collection",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update-many",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "atlas-local-create-deployment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search-knowledge",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "connect",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "create-collection",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "db-stats",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "drop-collection",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "drop-database",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "drop-index",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "list-collections",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "list-databases",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "rename-collection",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "atlas-local-connect-deployment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "atlas-local-create-deployment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "atlas-local-delete-deployment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "atlas-local-list-deployments",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T14:13:26.737Z"
   },
   {
@@ -784,7 +5130,381 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`git_amend` uses vague action words — LLM interprets scope as the broadest possible action"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"git_undo_commit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_revert\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_discard_changes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_unstage\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_undo_merge\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_reset\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_squash\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_amend\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_stage\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_commit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_create_branch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_list_branches\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_checkout\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_delete_branch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_move_changes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_cherry_pick\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_merge\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_rebase\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_pull\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_push\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_fetch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_update_branch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_stash\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_remote\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_log\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_show\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_blame\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_diff\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_search\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_file_history\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_status\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_reflog\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_recover_commit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_recover_branch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_find_lost\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_reset_to_reflog\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"git_unstage\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"git_squash\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"git_amend\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"git_blame\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"git_search\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"git_status\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "git_undo_commit",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_revert",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_discard_changes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_unstage",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_undo_merge",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_reset",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_squash",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_amend",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_stage",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_commit",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_create_branch",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_list_branches",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_checkout",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_delete_branch",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_move_changes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_cherry_pick",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_merge",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_rebase",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_pull",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_push",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_fetch",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_update_branch",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_stash",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_remote",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_log",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_show",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_blame",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_diff",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_search",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_file_history",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_status",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_reflog",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_recover_commit",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_recover_branch",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_find_lost",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_reset_to_reflog",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "git_unstage",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "git_squash",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "git_amend",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "git_blame",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "git_search",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "git_status",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T14:31:10.554Z"
   },
   {
@@ -838,7 +5558,541 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`list_pyroscope_label_names` response may leak secrets or API keys based on tool description"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_annotation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_folder\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_incident\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_annotation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_dashboard\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"add_activity_to_incident\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"alerting_manage_routing\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"alerting_manage_rules\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_annotation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_folder\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_incident\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"fetch_pyroscope_profile\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"find_error_pattern_logs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"find_slow_requests\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"generate_deeplink\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_alert_group\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_annotation_tags\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_annotations\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_assertions\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_current_oncall_users\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_dashboard_by_uid\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_dashboard_panel_queries\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_dashboard_property\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_dashboard_summary\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_datasource\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_incident\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_oncall_shift\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_panel_image\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_sift_analysis\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_sift_investigation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_alert_groups\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_datasources\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_incidents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_loki_label_names\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_loki_label_values\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_oncall_schedules\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_oncall_users\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_prometheus_label_names\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_prometheus_label_values\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_prometheus_metric_metadata\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_prometheus_metric_names\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_pyroscope_label_names\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_pyroscope_label_values\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_pyroscope_profile_types\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"query_loki_logs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"query_loki_patterns\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"query_loki_stats\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"query_prometheus\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"query_prometheus_histogram\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_dashboards\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_folders\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_annotation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_dashboard\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"add_activity_to_incident\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"alerting_manage_rules\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"fetch_pyroscope_profile\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"list_datasources\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"list_oncall_teams\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"list_pyroscope_profile_types\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"update_dashboard\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_annotation",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_folder",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_incident",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_annotation",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_dashboard",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "add_activity_to_incident",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "alerting_manage_routing",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "alerting_manage_rules",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_annotation",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_folder",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_incident",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "fetch_pyroscope_profile",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "find_error_pattern_logs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "find_slow_requests",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "generate_deeplink",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_alert_group",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_annotation_tags",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_annotations",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_assertions",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_current_oncall_users",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_dashboard_by_uid",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_dashboard_panel_queries",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_dashboard_property",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_dashboard_summary",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_datasource",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_incident",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_oncall_shift",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_panel_image",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_sift_analysis",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_sift_investigation",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_alert_groups",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_datasources",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_incidents",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_loki_label_names",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_loki_label_values",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_oncall_schedules",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_oncall_users",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_prometheus_label_names",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_prometheus_label_values",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_prometheus_metric_metadata",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_prometheus_metric_names",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_pyroscope_label_names",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_pyroscope_label_values",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_pyroscope_profile_types",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "query_loki_logs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "query_loki_patterns",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "query_loki_stats",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "query_prometheus",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "query_prometheus_histogram",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_dashboards",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_folders",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_annotation",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_dashboard",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "add_activity_to_incident",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "alerting_manage_rules",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "fetch_pyroscope_profile",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "list_datasources",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "list_oncall_teams",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "list_pyroscope_profile_types",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "update_dashboard",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T14:11:36.272Z"
   },
   {
@@ -892,7 +6146,121 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`get_blade_changelog` response may leak secrets or API keys based on tool description"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_blade_cursor_rules\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_new_blade_project\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"publish_lines_of_code_metric\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"release-bot\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_blade_cursor_rules\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_blade_component_docs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_blade_pattern_docs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_blade_general_docs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_new_blade_project\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_figma_to_code\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_blade_changelog\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"publish_lines_of_code_metric\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"hi_blade\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_blade_cursor_rules",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_new_blade_project",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "publish_lines_of_code_metric",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "release-bot"
+            ]
+          }
+        },
+        {
+          "tool": "create_blade_cursor_rules",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_blade_component_docs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_blade_pattern_docs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_blade_general_docs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_new_blade_project",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_figma_to_code",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_blade_changelog",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "publish_lines_of_code_metric",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "hi_blade",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:51:49.386Z"
   },
   {
@@ -945,7 +6313,228 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_apex_class\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_apex_class\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_apex_class\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"execute_tooling_query\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"run_tests\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"list_apex_classes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_apex_class\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_apex_class\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_apex_class\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_apex_class\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_async_apex_jobs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_apex_triggers\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_apex_trigger\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_apex_pages\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_apex_page\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"execute_tooling_query\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"describe_tooling_object\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_code_coverage\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_symbol_table\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"validate_syntax\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"check_apex_sharing\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"analyze_soql_performance\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"call_rest_api\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"describe_sobject\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_apex_class",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_apex_class",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_apex_class",
+          "action": "deny"
+        },
+        {
+          "tool": "execute_tooling_query",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "run_tests",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "list_apex_classes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_apex_class",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_apex_class",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_apex_class",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_apex_class",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_async_apex_jobs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_apex_triggers",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_apex_trigger",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_apex_pages",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_apex_page",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "execute_tooling_query",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "describe_tooling_object",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_code_coverage",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_symbol_table",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "validate_syntax",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "check_apex_sharing",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "analyze_soql_performance",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "call_rest_api",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "describe_sobject",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:13:38.239Z"
   },
   {
@@ -997,7 +6586,64 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`conf_post` response may leak secrets or API keys based on tool description"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"conf_delete\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"conf_get\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"conf_post\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"conf_put\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"conf_patch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"conf_delete\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "conf_delete",
+          "action": "deny"
+        },
+        {
+          "tool": "conf_get",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "conf_post",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "conf_put",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "conf_patch",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "conf_delete",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:08:12.627Z"
   },
   {
@@ -1046,7 +6692,33 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`aws_sso_ec2_exec_command` response may leak secrets or API keys based on tool description"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"aws_sso_exec_command\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"aws_sso_ec2_exec_command\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "aws_sso_exec_command",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "aws_sso_ec2_exec_command",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:08:27.250Z"
   },
   {
@@ -1098,7 +6770,160 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`snapshot` response may leak secrets or API keys based on tool description"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"press_key\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"eval\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"navigate\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"click_ref\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"type_ref\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"click\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"type\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"press_key\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"select\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"wait_for\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_text\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"eval\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"screenshot\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"ocr\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"fill_form\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_network_requests\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "press_key",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "eval",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "navigate",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "click_ref",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "type_ref",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "click",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "type",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "press_key",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "select",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "wait_for",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_text",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "eval",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "screenshot",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "ocr",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "fill_form",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_network_requests",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:07:47.073Z"
   },
   {
@@ -1149,7 +6974,1148 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`gitlab_unapprove_merge_request` uses vague action words — LLM interprets scope as the broadest possible action"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"gitlab_get_project\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_projects\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_repository\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_project_members\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_group_projects\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_group_iterations\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_search_repositories\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_search_code_blobs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_repository_tree\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_file_contents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_or_update_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_push_files\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_branch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_branch_diffs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_commits\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_commit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_commit_diff\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_merge_requests\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_merge_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_merge_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_fork_repository\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_update_merge_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_merge_merge_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_merge_request_diffs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_merge_request_diffs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_merge_request_code_context\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_merge_request_versions\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_merge_request_version\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_approve_merge_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_unapprove_merge_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_merge_request_approval_state\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_merge_request_discussions\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_merge_request_thread\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_mr_discussions\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_merge_request_discussion_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_update_merge_request_discussion_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_delete_merge_request_discussion_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_resolve_merge_request_thread\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_merge_request_notes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_merge_request_notes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_draft_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_draft_notes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_draft_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_update_draft_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_delete_draft_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_publish_draft_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_bulk_publish_draft_notes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_merge_request_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_merge_request_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_update_merge_request_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_delete_merge_request_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_issues\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_my_issues\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_update_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_delete_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_issue_discussions\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_issue_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_update_issue_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_issue_links\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_issue_link\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_issue_link\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_delete_issue_link\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_wiki_pages\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_wiki_page\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_wiki_page\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_update_wiki_page\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_delete_wiki_page\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_pipelines\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_pipeline\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_pipeline_jobs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_pipeline_trigger_jobs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_pipeline_job\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_pipeline_job_output\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_pipeline\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_retry_pipeline\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_cancel_pipeline\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_retry_pipeline_job\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_cancel_pipeline_job\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_play_pipeline_job\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_milestones\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_milestone\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_milestone\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_update_milestone\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_edit_milestone\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_delete_milestone\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_milestone_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_milestone_merge_requests\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_promote_milestone\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_milestone_burndown_events\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_releases\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_release\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_release\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_update_release\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_delete_release\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_release_evidence\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_download_release_asset\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_labels\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_update_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_delete_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_namespaces\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_namespace\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_verify_namespace\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_users\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_events\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_project_events\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_upload_markdown\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_download_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_execute_graphql_query\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_execute_graphql_mutation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_execute_graphql\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"health_check\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_projects\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gitlab_search_repositories\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_repository_tree\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_file_contents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_or_update_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gitlab_push_files\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_merge_request_diffs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gitlab_unapprove_merge_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gitlab_my_issues\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_namespaces\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gitlab_get_users\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_events\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gitlab_upload_markdown\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "gitlab_get_project",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_projects",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_repository",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_project_members",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_group_projects",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_group_iterations",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_search_repositories",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_search_code_blobs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_repository_tree",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_file_contents",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_or_update_file",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_push_files",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_branch",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_branch_diffs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_commits",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_commit",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_commit_diff",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_merge_requests",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_merge_request",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_merge_request",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_fork_repository",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_update_merge_request",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_merge_merge_request",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_merge_request_diffs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_merge_request_diffs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_merge_request_code_context",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_merge_request_versions",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_merge_request_version",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_approve_merge_request",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_unapprove_merge_request",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_merge_request_approval_state",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_merge_request_discussions",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_merge_request_thread",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_mr_discussions",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_merge_request_discussion_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_update_merge_request_discussion_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_delete_merge_request_discussion_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_resolve_merge_request_thread",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_merge_request_notes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_merge_request_notes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_draft_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_draft_notes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_draft_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_update_draft_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_delete_draft_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_publish_draft_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_bulk_publish_draft_notes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_merge_request_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_merge_request_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_update_merge_request_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_delete_merge_request_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_issues",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_my_issues",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_update_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_delete_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_issue_discussions",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_issue_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_update_issue_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_issue_links",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_issue_link",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_issue_link",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_delete_issue_link",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_wiki_pages",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_wiki_page",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_wiki_page",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_update_wiki_page",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_delete_wiki_page",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_pipelines",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_pipeline",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_pipeline_jobs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_pipeline_trigger_jobs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_pipeline_job",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_pipeline_job_output",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_pipeline",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_retry_pipeline",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_cancel_pipeline",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_retry_pipeline_job",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_cancel_pipeline_job",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_play_pipeline_job",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_milestones",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_milestone",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_milestone",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_update_milestone",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_edit_milestone",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_delete_milestone",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_milestone_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_milestone_merge_requests",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_promote_milestone",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_milestone_burndown_events",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_releases",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_release",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_release",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_update_release",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_delete_release",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_release_evidence",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_download_release_asset",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_labels",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_label",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_label",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_update_label",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_delete_label",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_namespaces",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_namespace",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_verify_namespace",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_users",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_events",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_get_project_events",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_upload_markdown",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_download_attachment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_execute_graphql_query",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_execute_graphql_mutation",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_execute_graphql",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "health_check",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gitlab_list_projects",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gitlab_search_repositories",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gitlab_get_repository_tree",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gitlab_get_file_contents",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gitlab_create_or_update_file",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gitlab_push_files",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gitlab_get_merge_request_diffs",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gitlab_unapprove_merge_request",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gitlab_my_issues",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gitlab_list_namespaces",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gitlab_get_users",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gitlab_list_events",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gitlab_upload_markdown",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:12:57.799Z"
   },
   {
@@ -1201,7 +8167,278 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`get_my_cards` uses vague action words — LLM interprets scope as the broadest possible action"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"update_card_details\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"set_active_board\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"set_active_workspace\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"remove_member_from_card\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_label\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"get_cards_by_list_id\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_lists\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_recent_activity\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"add_card_to_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_card_details\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"archive_card\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"move_card\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"add_list_to_board\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"archive_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"attach_image_to_card\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"set_active_board\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"set_active_workspace\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_boards_in_workspace\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_board_members\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"assign_member_to_card\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"remove_member_from_card\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_board_labels\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_card_history\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_my_cards\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"list_boards\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"list_workspaces\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "update_card_details",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "set_active_board",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "set_active_workspace",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "remove_member_from_card",
+          "action": "deny"
+        },
+        {
+          "tool": "create_label",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_label",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_label",
+          "action": "deny"
+        },
+        {
+          "tool": "get_cards_by_list_id",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_lists",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_recent_activity",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "add_card_to_list",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_card_details",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "archive_card",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "move_card",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "add_list_to_board",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "archive_list",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "attach_image_to_card",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "set_active_board",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "set_active_workspace",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_boards_in_workspace",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_board_members",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "assign_member_to_card",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "remove_member_from_card",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_board_labels",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_label",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_label",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_label",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_card_history",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_my_cards",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "list_boards",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "list_workspaces",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:23:36.645Z"
   },
   {
@@ -1254,7 +8491,54 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_entities\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_relations\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_entities\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"delete_observations\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"delete_relations\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"search_nodes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_entities",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_relations",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_entities",
+          "action": "deny"
+        },
+        {
+          "tool": "delete_observations",
+          "action": "deny"
+        },
+        {
+          "tool": "delete_relations",
+          "action": "deny"
+        },
+        {
+          "tool": "search_nodes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:39:08.762Z"
   },
   {
@@ -1309,7 +8593,262 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_entry\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_entry\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_entry\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_content_type\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_content_type\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_content_type\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_component\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_component\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"publish_entry\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"release-bot\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"get_entries\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_entry\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_entry\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_entry\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_entry\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"upload_media\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"upload_media_from_path\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_content_type_schema\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"connect_relation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"disconnect_relation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_content_type\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_content_type\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_content_type\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_component_schema\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_component\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_component\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"publish_entry\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"unpublish_entry\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"upload_media\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"upload_media_from_path\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_entry",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_entry",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_entry",
+          "action": "deny"
+        },
+        {
+          "tool": "create_content_type",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_content_type",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_content_type",
+          "action": "deny"
+        },
+        {
+          "tool": "create_component",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_component",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "publish_entry",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "release-bot"
+            ]
+          }
+        },
+        {
+          "tool": "get_entries",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_entry",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_entry",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_entry",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_entry",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "upload_media",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "upload_media_from_path",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_content_type_schema",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "connect_relation",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "disconnect_relation",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_content_type",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_content_type",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_content_type",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_component_schema",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_component",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_component",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "publish_entry",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "unpublish_entry",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "upload_media",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "upload_media_from_path",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:15:24.985Z"
   },
   {
@@ -1355,7 +8894,117 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"runRemoteCommand\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"runCommandBatch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"runRemoteCommand\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"getHostInfo\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"checkConnectivity\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"uploadFile\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"downloadFile\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"runCommandBatch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"listKnownHosts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"getHostInfo\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"uploadFile\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"downloadFile\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "runRemoteCommand",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "runCommandBatch",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "runRemoteCommand",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "getHostInfo",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "checkConnectivity",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "uploadFile",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "downloadFile",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "runCommandBatch",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "listKnownHosts",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "getHostInfo",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "uploadFile",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "downloadFile",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:44:40.469Z"
   },
   {
@@ -1400,7 +9049,62 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"run\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"run_background\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"run\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"run_background\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"kill_background\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "run",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "run_background",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "run",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "run_background",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "kill_background",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:25:46.685Z"
   },
   {
@@ -1446,7 +9150,214 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"evaluate_script\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"press_key\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"click\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"drag\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"emulate\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"evaluate_script\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"fill\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_network_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"handle_dialog\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"hover\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"lighthouse_audit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"navigate_page\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"new_page\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"performance_analyze_insight\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"performance_start_trace\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"performance_stop_trace\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"press_key\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"take_memory_snapshot\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"take_screenshot\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"take_snapshot\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"type_text\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"upload_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "evaluate_script",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "press_key",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "click",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "drag",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "emulate",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "evaluate_script",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "fill",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_network_request",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "handle_dialog",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "hover",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "lighthouse_audit",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "navigate_page",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "new_page",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "performance_analyze_insight",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "performance_start_trace",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "performance_stop_trace",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "press_key",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "take_memory_snapshot",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "take_screenshot",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "take_snapshot",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "type_text",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "upload_file",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:03:07.569Z"
   },
   {
@@ -1492,7 +9403,321 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`deploy_one_off_dyno` can publish or deploy to production — any agent can trigger a release"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_app\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_addon\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"pg_credentials\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"deploy_to_heroku\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"release-bot\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"deploy_one_off_dyno\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"release-bot\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"list_apps\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_app_info\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_app\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"rename_app\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"maintenance_on\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"maintenance_off\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_app_logs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_addons\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_addon_info\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_addon\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_addon_plans\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"pg_psql\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"pg_info\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"pg_ps\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"pg_locks\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"pg_outliers\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"pg_credentials\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"pg_kill\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"pg_maintenance\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"pg_backups\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"pg_upgrade\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"ps_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"ps_scale\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"ps_restart\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"pipelines_create\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"pipelines_promote\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"pipelines_info\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"deploy_to_heroku\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"deploy_one_off_dyno\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_app",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_addon",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "pg_credentials",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "deploy_to_heroku",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "release-bot"
+            ]
+          }
+        },
+        {
+          "tool": "deploy_one_off_dyno",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "release-bot"
+            ]
+          }
+        },
+        {
+          "tool": "list_apps",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_app_info",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_app",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "rename_app",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "maintenance_on",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "maintenance_off",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_app_logs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_addons",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_addon_info",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_addon",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_addon_plans",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "pg_psql",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "pg_info",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "pg_ps",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "pg_locks",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "pg_outliers",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "pg_credentials",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "pg_kill",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "pg_maintenance",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "pg_backups",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "pg_upgrade",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "ps_list",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "ps_scale",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "ps_restart",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "pipelines_create",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "pipelines_promote",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "pipelines_info",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "deploy_to_heroku",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "deploy_one_off_dyno",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:01:32.350Z"
   },
   {
@@ -1539,7 +9764,148 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`move_file` uses vague action words — LLM interprets scope as the broadest possible action"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"write_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_directory\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"read_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"read_text_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"read_media_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"write_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_directory\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_directory\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_directory_with_sizes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"directory_tree\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"move_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_files\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_file_info\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"read_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "write_file",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_directory",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "read_file",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "read_text_file",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "read_media_file",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "write_file",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "edit_file",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_directory",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_directory",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_directory_with_sizes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "directory_tree",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "move_file",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_files",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_file_info",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "read_file",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:39:07.375Z"
   },
   {
@@ -1582,7 +9948,74 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`get_node` response may leak secrets or API keys based on tool description"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"tools_documentation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_nodes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_node\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"validate_node\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_templates\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_nodes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"validate_node\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "tools_documentation",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_nodes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_node",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "validate_node",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_templates",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_nodes",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "validate_node",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T14:13:28.296Z"
   },
   {
@@ -1625,7 +10058,232 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`API-get-self` uses vague action words — LLM interprets scope as the broadest possible action"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"API-get-user\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-get-users\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-get-self\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-post-search\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-get-block-children\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-patch-block-children\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-retrieve-a-block\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-update-a-block\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-delete-a-block\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-retrieve-a-page\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-patch-page\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-post-page\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-retrieve-a-page-property\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-retrieve-a-comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-query-data-source\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-retrieve-a-data-source\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-update-a-data-source\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-create-a-data-source\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-list-data-source-templates\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-retrieve-a-database\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-move-page\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-get-user\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"API-get-users\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"API-get-self\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"API-retrieve-a-database\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "API-get-user",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-get-users",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-get-self",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-post-search",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-get-block-children",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-patch-block-children",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-retrieve-a-block",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-update-a-block",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-delete-a-block",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-retrieve-a-page",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-patch-page",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-post-page",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-retrieve-a-page-property",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-retrieve-a-comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-query-data-source",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-retrieve-a-data-source",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-update-a-data-source",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-create-a-data-source",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-list-data-source-templates",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-retrieve-a-database",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-move-page",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-get-user",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "API-get-users",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "API-get-self",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "API-retrieve-a-database",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:24:44.324Z"
   },
   {
@@ -1670,7 +10328,168 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create-environment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create-project-and-link\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"deploy-template\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"release-bot\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"deploy\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"release-bot\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"set-variables\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create-environment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create-project-and-link\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"deploy-template\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"deploy\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"generate-domain\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-logs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"link-environment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"link-service\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list-deployments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list-services\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list-variables\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"set-variables\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create-environment",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create-project-and-link",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "deploy-template",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "release-bot"
+            ]
+          }
+        },
+        {
+          "tool": "deploy",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "release-bot"
+            ]
+          }
+        },
+        {
+          "tool": "set-variables",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create-environment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create-project-and-link",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "deploy-template",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "deploy",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "generate-domain",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-logs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "link-environment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "link-service",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list-deployments",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list-services",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list-variables",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "set-variables",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:01:19.481Z"
   },
   {
@@ -1716,7 +10535,122 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_reminder_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_reminder_list\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_reminder\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_reminder\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_reminder\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"delete_reminder_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"rename_reminder_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_reminders\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_reminder\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_reminder\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_reminder\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_reminder\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"complete_reminder\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_reminder_list",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_reminder_list",
+          "action": "deny"
+        },
+        {
+          "tool": "create_reminder",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_reminder",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_reminder",
+          "action": "deny"
+        },
+        {
+          "tool": "delete_reminder_list",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "rename_reminder_list",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_reminders",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_reminder",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_reminder",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_reminder",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_reminder",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "complete_reminder",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T16:35:43.552Z"
   },
   {
@@ -1761,7 +10695,107 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"run_ui5_linter\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_ui5_app\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_integration_card\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"run_manifest_validation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"run_ui5_linter\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_api_reference\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_project_info\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_ui5_app\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_integration_card\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"run_manifest_validation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "run_ui5_linter",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "create_ui5_app",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_integration_card",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "run_manifest_validation",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "run_ui5_linter",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_api_reference",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_project_info",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_ui5_app",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_integration_card",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "run_manifest_validation",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:03:31.448Z"
   },
   {
@@ -1801,7 +10835,217 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_record\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_records\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_records\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_table\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_table\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_field\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_field\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"list_records\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_records\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_tables\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"describe_table\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_record\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_record\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_records\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_records\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_table\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_table\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_field\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_field\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_comments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"upload_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_record",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_records",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_records",
+          "action": "deny"
+        },
+        {
+          "tool": "create_table",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_table",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_field",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_field",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_comment",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "list_records",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_records",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_tables",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "describe_table",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_record",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_record",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_records",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_records",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_table",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_table",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_field",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_field",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_comments",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "upload_attachment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:12:56.924Z"
   },
   {
@@ -1838,7 +11082,390 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`search_documents` response may leak secrets or API keys based on tool description"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"get_plenary_sessions\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_documents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_parliamentary_questions\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"analyze_committee_activity\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"track_mep_attendance\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"analyze_country_delegation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"generate_political_landscape\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_speeches\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_procedures\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_adopted_texts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_events\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_meeting_activities\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_meeting_decisions\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_mep_declarations\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_plenary_documents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_committee_documents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_plenary_session_documents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_controlled_vocabularies\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_external_documents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_meeting_foreseen_activities\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_procedure_events\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_meeting_plenary_session_documents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_meeting_plenary_session_document_items\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_meps_feed\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_events_feed\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_procedures_feed\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_adopted_texts_feed\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_mep_declarations_feed\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_documents_feed\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_plenary_documents_feed\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_committee_documents_feed\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_plenary_session_documents_feed\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_external_documents_feed\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_parliamentary_questions_feed\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_corporate_bodies_feed\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_controlled_vocabularies_feed\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_procedure_event_by_id\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_documents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"detect_voting_anomalies\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"early_warning_system\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"comparative_intelligence\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"correlate_intelligence\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_mep_declarations\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "get_plenary_sessions",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_documents",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_parliamentary_questions",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "analyze_committee_activity",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "track_mep_attendance",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "analyze_country_delegation",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "generate_political_landscape",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_speeches",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_procedures",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_adopted_texts",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_events",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_meeting_activities",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_meeting_decisions",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_mep_declarations",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_plenary_documents",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_committee_documents",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_plenary_session_documents",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_controlled_vocabularies",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_external_documents",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_meeting_foreseen_activities",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_procedure_events",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_meeting_plenary_session_documents",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_meeting_plenary_session_document_items",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_meps_feed",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_events_feed",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_procedures_feed",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_adopted_texts_feed",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_mep_declarations_feed",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_documents_feed",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_plenary_documents_feed",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_committee_documents_feed",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_plenary_session_documents_feed",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_external_documents_feed",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_parliamentary_questions_feed",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_corporate_bodies_feed",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_controlled_vocabularies_feed",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_procedure_event_by_id",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_documents",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "detect_voting_anomalies",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "early_warning_system",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "comparative_intelligence",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "correlate_intelligence",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_mep_declarations",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:51:51.567Z"
   },
   {
@@ -1879,7 +11506,322 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`playwright_press_key` accesses credentials with no scope or audience restriction"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"playwright_delete\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"playwright_press_key\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"end_codegen_session\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_codegen_session\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"clear_codegen_session\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_navigate\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_screenshot\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_click\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_iframe_click\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_iframe_fill\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_fill\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_select\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_hover\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_upload_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_evaluate\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_console_logs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_resize\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_get\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_post\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_put\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_patch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_delete\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_expect_response\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_assert_response\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_custom_user_agent\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_get_visible_html\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_drag\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_press_key\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_save_as_pdf\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"playwright_click_and_switch_tab\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"end_codegen_session\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"playwright_upload_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"playwright_resize\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"playwright_custom_user_agent\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"playwright_press_key\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"playwright_save_as_pdf\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "playwright_delete",
+          "action": "deny"
+        },
+        {
+          "tool": "playwright_press_key",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "end_codegen_session",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_codegen_session",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "clear_codegen_session",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_navigate",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_screenshot",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_click",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_iframe_click",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_iframe_fill",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_fill",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_select",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_hover",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_upload_file",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_evaluate",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_console_logs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_resize",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_get",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_post",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_put",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_patch",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_delete",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_expect_response",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_assert_response",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_custom_user_agent",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_get_visible_html",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_drag",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_press_key",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_save_as_pdf",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "playwright_click_and_switch_tab",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "end_codegen_session",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "playwright_upload_file",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "playwright_resize",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "playwright_custom_user_agent",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "playwright_press_key",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "playwright_save_as_pdf",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:40:43.233Z"
   },
   {
@@ -1918,7 +11860,110 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`gitlab_oauth_status` accesses credentials with no scope or audience restriction"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"gitlab_oauth_start\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"gitlab_oauth_status\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"health_check\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_create_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_update_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_project_members\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_apply_issue_transition\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_issues\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gitlab_list_labels\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"health_check\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gitlab_apply_issue_transition\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "gitlab_oauth_start",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "gitlab_oauth_status",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "health_check",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_create_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_update_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_project_members",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_apply_issue_transition",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_issues",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gitlab_list_labels",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "health_check",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gitlab_apply_issue_transition",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:44:42.944Z"
   },
   {
@@ -1958,7 +12003,91 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_meeting\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_meeting\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"delete_meeting\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"create_meeting\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"schedule_meeting\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_meetings\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_meeting\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_meeting\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"delete_meeting\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_meeting",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_meeting",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "delete_meeting",
+          "action": "deny"
+        },
+        {
+          "tool": "create_meeting",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "schedule_meeting",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_meetings",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_meeting",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_meeting",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "delete_meeting",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T16:35:42.351Z"
   },
   {
@@ -1998,7 +12127,330 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_or_update_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_repository\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"push_files\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"release-bot\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_pull_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_branch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_pull_request_review\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_pull_request_branch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_or_update_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_repositories\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_repository\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_file_contents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"push_files\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_pull_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"fork_repository\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_branch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_commits\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_issues\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"add_issue_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_code\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_issues\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_users\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_pull_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_pull_requests\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_pull_request_review\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"merge_pull_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_pull_request_files\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_pull_request_status\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_pull_request_branch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_pull_request_comments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_pull_request_reviews\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_or_update_file",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_repository",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "push_files",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "release-bot"
+            ]
+          }
+        },
+        {
+          "tool": "create_issue",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_pull_request",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_branch",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_issue",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_pull_request_review",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_pull_request_branch",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_or_update_file",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_repositories",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_repository",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_file_contents",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "push_files",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_pull_request",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "fork_repository",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_branch",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_commits",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_issues",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "add_issue_comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_code",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_issues",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_users",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_pull_request",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_pull_requests",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_pull_request_review",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "merge_pull_request",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_pull_request_files",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_pull_request_status",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_pull_request_branch",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_pull_request_comments",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_pull_request_reviews",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:21:25.286Z"
   },
   {
@@ -2036,7 +12488,204 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"mobile_type_keys\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"mobile_list_apps\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_launch_app\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_terminate_app\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_install_app\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_uninstall_app\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_get_screen_size\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_click_on_screen_at_coordinates\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_double_tap_on_screen\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_long_press_on_screen_at_coordinates\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_list_elements_on_screen\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_press_button\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_open_url\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_swipe_on_screen\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_type_keys\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_save_screenshot\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_take_screenshot\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_set_orientation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_get_orientation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_start_screen_recording\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mobile_stop_screen_recording\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "mobile_type_keys",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "mobile_list_apps",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_launch_app",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_terminate_app",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_install_app",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_uninstall_app",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_get_screen_size",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_click_on_screen_at_coordinates",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_double_tap_on_screen",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_long_press_on_screen_at_coordinates",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_list_elements_on_screen",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_press_button",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_open_url",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_swipe_on_screen",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_type_keys",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_save_screenshot",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_take_screenshot",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_set_orientation",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_get_orientation",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_start_screen_recording",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mobile_stop_screen_recording",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:07:16.402Z"
   },
   {
@@ -2077,7 +12726,379 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_or_update_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_repository\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"push_files\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"release-bot\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_pull_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_branch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_pull_request_review\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_pull_request_branch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_or_update_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_repositories\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_repository\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_file_contents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"push_files\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_pull_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"fork_repository\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_branch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_commits\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_issues\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"add_issue_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_code\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_issues\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_users\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_pull_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_pull_requests\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_pull_request_review\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"merge_pull_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_pull_request_files\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_pull_request_status\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_pull_request_branch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_pull_request_comments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_pull_request_reviews\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_or_update_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"create_repository\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_file_contents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"push_files\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"fork_repository\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"search_users\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_pull_request_files\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_or_update_file",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_repository",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "push_files",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "release-bot"
+            ]
+          }
+        },
+        {
+          "tool": "create_issue",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_pull_request",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_branch",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_issue",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_pull_request_review",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_pull_request_branch",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_or_update_file",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_repositories",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_repository",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_file_contents",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "push_files",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_pull_request",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "fork_repository",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_branch",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_commits",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_issues",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "add_issue_comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_code",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_issues",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_users",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_pull_request",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_pull_requests",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_pull_request_review",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "merge_pull_request",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_pull_request_files",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_pull_request_status",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_pull_request_branch",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_pull_request_comments",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_pull_request_reviews",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_or_update_file",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "create_repository",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_file_contents",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "push_files",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "fork_repository",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "search_users",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_pull_request_files",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T20:21:19.580Z"
   },
   {
@@ -2116,7 +13137,80 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"remove_item\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"add_omnifocus_task\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"add_project\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"remove_item\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_item\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"query_omnifocus\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_perspective_view\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"dump_database\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "remove_item",
+          "action": "deny"
+        },
+        {
+          "tool": "add_omnifocus_task",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "add_project",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "remove_item",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "edit_item",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "query_omnifocus",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_perspective_view",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "dump_database",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T16:35:41.019Z"
   },
   {
@@ -2153,7 +13247,96 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`generateImage` response may leak secrets or API keys based on tool description"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"getOgData\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"getOgScrapeData\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"getOgScreenshot\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"getOgQuery\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"getOgExtract\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"generateImage\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"iterateImage\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"inspectImageSession\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"exportImageAsset\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "getOgData",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "getOgScrapeData",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "getOgScreenshot",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "getOgQuery",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "getOgExtract",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "generateImage",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "iterateImage",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "inspectImageSession",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "exportImageAsset",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:42:55.582Z"
   },
   {
@@ -2192,7 +13375,159 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"browser_press_key\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"browser_console_messages\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"browser_handle_dialog\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"browser_evaluate\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"browser_press_key\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"browser_type\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"browser_navigate\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"browser_network_requests\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"browser_run_code\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"browser_take_screenshot\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"browser_snapshot\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"browser_click\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"browser_drag\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"browser_hover\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"browser_select_option\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"browser_wait_for\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "browser_press_key",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "browser_console_messages",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "browser_handle_dialog",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "browser_evaluate",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "browser_press_key",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "browser_type",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "browser_navigate",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "browser_network_requests",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "browser_run_code",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "browser_take_screenshot",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "browser_snapshot",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "browser_click",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "browser_drag",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "browser_hover",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "browser_select_option",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "browser_wait_for",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:05:48.319Z"
   },
   {
@@ -2231,7 +13566,139 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Tool name \"manage-webhook\" is ambiguous — \"manage\" could mean read, create, update, or delete. LLM may choose the most destructive interpretation."
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create-discount\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create-draft-order\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"get-products\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-products-by-collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-customers\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"tag-customer\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-orders\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-order\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create-discount\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create-draft-order\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"complete-draft-order\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-collections\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"manage-webhook\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"manage-webhook\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create-discount",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create-draft-order",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "get-products",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-products-by-collection",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-customers",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "tag-customer",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-orders",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-order",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create-discount",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create-draft-order",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "complete-draft-order",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-collections",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "manage-webhook",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "manage-webhook",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T14:48:26.611Z"
   },
   {
@@ -2271,7 +13738,203 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`create_design_system` response may leak secrets or API keys based on tool description"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_project\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_design_system\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_design_system\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_project\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_project\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_projects\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_screens\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_screen\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"generate_screen_from_text\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"edit_screens\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"generate_variants\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_design_system\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_design_system\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_design_systems\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"apply_design_system\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"fetch_screen_code\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"fetch_screen_image\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create_project\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"list_projects\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"create_design_system\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"update_design_system\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"apply_design_system\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_project",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_design_system",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_design_system",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_project",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_project",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_projects",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_screens",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_screen",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "generate_screen_from_text",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "edit_screens",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "generate_variants",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_design_system",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_design_system",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_design_systems",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "apply_design_system",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "fetch_screen_code",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "fetch_screen_image",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create_project",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "list_projects",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "create_design_system",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "update_design_system",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "apply_design_system",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:20:53.853Z"
   },
   {
@@ -2308,7 +13971,542 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`trello_update_comment` uses vague action words — LLM interprets scope as the broadest possible action"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"trello_get_board\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_create_board\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_get_board_labels\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_get_board_members\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_update_board\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_create_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_update_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_get_list_cards\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_archive_all_cards\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_move_all_cards\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_move_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_get_card\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_create_card\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_update_card\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_delete_card\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_search_cards\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_add_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_get_card_comments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_update_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_delete_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_add_card_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_remove_card_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_assign_member\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_remove_member\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_add_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_get_attachments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_delete_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_copy_card\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_create_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_update_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_delete_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_create_checklist\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_update_checklist\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_delete_checklist\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_get_checklist\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_add_checklist_item\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_update_checklist_item\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_delete_checklist_item\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_copy_checklist\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_get_member\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_get_member_boards\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_get_member_cards\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_search_members\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"trello_get_board_members\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_archive_all_cards\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_move_all_cards\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_move_list\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_add_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_update_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_delete_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_add_card_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_remove_card_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_assign_member\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_remove_member\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_delete_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_delete_label\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_delete_checklist\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_update_checklist_item\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_delete_checklist_item\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_get_me\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_get_member\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_get_member_boards\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"trello_get_member_cards\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "trello_get_board",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_create_board",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_get_board_labels",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_get_board_members",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_update_board",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_create_list",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_update_list",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_get_list_cards",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_archive_all_cards",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_move_all_cards",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_move_list",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_get_card",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_create_card",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_update_card",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_delete_card",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_search_cards",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_add_comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_get_card_comments",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_update_comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_delete_comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_add_card_label",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_remove_card_label",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_assign_member",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_remove_member",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_add_attachment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_get_attachments",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_delete_attachment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_copy_card",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_create_label",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_update_label",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_delete_label",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_create_checklist",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_update_checklist",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_delete_checklist",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_get_checklist",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_add_checklist_item",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_update_checklist_item",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_delete_checklist_item",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_copy_checklist",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_get_member",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_get_member_boards",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_get_member_cards",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_search_members",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "trello_get_board_members",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_archive_all_cards",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_move_all_cards",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_move_list",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_add_comment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_update_comment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_delete_comment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_add_card_label",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_remove_card_label",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_assign_member",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_remove_member",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_delete_attachment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_delete_label",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_delete_checklist",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_update_checklist_item",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_delete_checklist_item",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_get_me",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_get_member",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_get_member_boards",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "trello_get_member_cards",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:12:46.226Z"
   },
   {
@@ -2348,7 +14546,131 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"deleteDeployment\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"getDeploymentEvents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"getDeployment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"cancelDeployment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"listDeploymentFiles\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"getDeploymentFileContents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"getDeployments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"deleteDeployment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"getDeploymentEvents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"getDeployment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"cancelDeployment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"listDeploymentFiles\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"getDeploymentFileContents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"getDeployments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"deleteDeployment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "deleteDeployment",
+          "action": "deny"
+        },
+        {
+          "tool": "getDeploymentEvents",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "getDeployment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "cancelDeployment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "listDeploymentFiles",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "getDeploymentFileContents",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "getDeployments",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "deleteDeployment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "getDeploymentEvents",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "getDeployment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "cancelDeployment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "listDeploymentFiles",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "getDeploymentFileContents",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "getDeployments",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "deleteDeployment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:07:26.679Z"
   },
   {
@@ -2378,7 +14700,78 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"get-monitors\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-dashboard\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-metrics\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-metric-metadata\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-events\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-incidents\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search-logs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "get-monitors",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-dashboard",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-metrics",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-metric-metadata",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-events",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-incidents",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search-logs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:14:54.787Z"
   },
   {
@@ -2408,7 +14801,239 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"discord_send_message\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"discord_edit_message\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"discord_delete_message\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"discord_add_reaction\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"discord_remove_reaction\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"discord_get_message_history\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"discord_search_messages\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"discord_get_message\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"discord_list_attachments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"discord_download_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"discord_cleanup_download\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"discord_get_channel\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"discord_create_dm\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"discord_remove_friend\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"discord_send_message\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"discord_edit_message\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"discord_delete_message\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"discord_add_reaction\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"discord_remove_reaction\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"discord_get_message_history\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"discord_search_messages\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"discord_list_attachments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"discord_download_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"discord_cleanup_download\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"discord_get_dm_channels\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"discord_create_dm\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"discord_get_friends\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"discord_add_friend\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "discord_send_message",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "discord_edit_message",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "discord_delete_message",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "discord_add_reaction",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "discord_remove_reaction",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "discord_get_message_history",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "discord_search_messages",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "discord_get_message",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "discord_list_attachments",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "discord_download_attachment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "discord_cleanup_download",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "discord_get_channel",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "discord_create_dm",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "discord_remove_friend",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "discord_send_message",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "discord_edit_message",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "discord_delete_message",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "discord_add_reaction",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "discord_remove_reaction",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "discord_get_message_history",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "discord_search_messages",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "discord_list_attachments",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "discord_download_attachment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "discord_cleanup_download",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "discord_get_dm_channels",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "discord_create_dm",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "discord_get_friends",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "discord_add_friend",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:12:25.669Z"
   },
   {
@@ -2443,7 +15068,184 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`gmail_authenticate` accesses credentials with no scope or audience restriction"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"gmail_authenticate\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"gmail_send_email\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gmail_read_email\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gmail_search_emails\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"analyze_conversation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gmail_mark_email\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gmail_move_email\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gmail_delete_email\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gmail_list_attachments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gmail_get_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gmail_draft\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gmail_send_email\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gmail_read_email\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gmail_search_emails\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"analyze_conversation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gmail_mark_email\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gmail_move_email\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gmail_list_attachments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gmail_get_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gmail_draft\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"gmail_logout\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "gmail_authenticate",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "gmail_send_email",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gmail_read_email",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gmail_search_emails",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "analyze_conversation",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gmail_mark_email",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gmail_move_email",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gmail_delete_email",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gmail_list_attachments",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gmail_get_attachment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gmail_draft",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gmail_send_email",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gmail_read_email",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gmail_search_emails",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "analyze_conversation",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gmail_mark_email",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gmail_move_email",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gmail_list_attachments",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gmail_get_attachment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gmail_draft",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "gmail_logout",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:12:27.837Z"
   },
   {
@@ -2472,7 +15274,87 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"get_component\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_component_demo\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_component_metadata\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_directory_structure\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_block\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_blocks\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"apply_theme\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_theme\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "get_component",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_component_demo",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_component_metadata",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_directory_structure",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_block",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_blocks",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "apply_theme",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_theme",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:03:44.926Z"
   },
   {
@@ -2505,7 +15387,184 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`linear_auth_callback` accesses credentials with no scope or audience restriction"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"linear_auth_callback\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"auth-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"linear_auth_callback\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_create_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_edit_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_search_issues\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_get_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_delete_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_get_project\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_create_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_update_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_delete_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_resolve_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_unresolve_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_create_customer_need_from_attachment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_get_project_milestones\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_create_project_milestone\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_update_project_milestone\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_delete_project_milestone\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_get_user\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "linear_auth_callback",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "auth-agent"
+            ]
+          }
+        },
+        {
+          "tool": "linear_auth_callback",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_create_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_edit_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_search_issues",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_get_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_delete_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_get_project",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_create_comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_update_comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_delete_comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_resolve_comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_unresolve_comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_create_customer_need_from_attachment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_get_project_milestones",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_create_project_milestone",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_update_project_milestone",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_delete_project_milestone",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_get_user",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:23:24.682Z"
   },
   {
@@ -2536,7 +15595,357 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"slack_list_workspaces\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_switch_workspace\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_get_current_workspace\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_list_channels\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_get_channel_info\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_get_channel_members\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_get_messages\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_get_thread_replies\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_send_message\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_reply_to_thread\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_search_messages\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_list_users\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_get_user_info\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_get_user_profile\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_list_files\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_get_file_info\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_upload_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_add_reaction\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_remove_reaction\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_get_reactions\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"slack_switch_workspace\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_list_channels\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_get_channel_info\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_get_channel_members\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_get_messages\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_get_thread_replies\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_send_message\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_reply_to_thread\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_search_messages\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_list_users\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_get_user_info\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_get_user_profile\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_list_files\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_get_file_info\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_upload_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_add_reaction\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_remove_reaction\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"slack_get_reactions\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "slack_list_workspaces",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_switch_workspace",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_get_current_workspace",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_list_channels",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_get_channel_info",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_get_channel_members",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_get_messages",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_get_thread_replies",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_send_message",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_reply_to_thread",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_search_messages",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_list_users",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_get_user_info",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_get_user_profile",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_list_files",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_get_file_info",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_upload_file",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_add_reaction",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_remove_reaction",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_get_reactions",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "slack_switch_workspace",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_list_channels",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_get_channel_info",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_get_channel_members",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_get_messages",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_get_thread_replies",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_send_message",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_reply_to_thread",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_search_messages",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_list_users",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_get_user_info",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_get_user_profile",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_list_files",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_get_file_info",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_upload_file",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_add_reaction",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_remove_reaction",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "slack_get_reactions",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:09:26.394Z"
   },
   {
@@ -2566,7 +15975,42 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"echo\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gzip-file-as-resource\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"simulate-research-query\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "echo",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gzip-file-as-resource",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "simulate-research-query",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:00:15.971Z"
   },
   {
@@ -2596,7 +16040,204 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"API-get-user\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-get-users\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-get-self\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-post-search\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-get-block-children\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-patch-block-children\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-retrieve-a-block\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-update-a-block\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-delete-a-block\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-retrieve-a-page\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-patch-page\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-post-page\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-retrieve-a-page-property\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-retrieve-a-comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-query-data-source\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-retrieve-a-data-source\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-update-a-data-source\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-create-a-data-source\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-list-data-source-templates\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-retrieve-a-database\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"API-move-page\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "API-get-user",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-get-users",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-get-self",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-post-search",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-get-block-children",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-patch-block-children",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-retrieve-a-block",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-update-a-block",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-delete-a-block",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-retrieve-a-page",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-patch-page",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-post-page",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-retrieve-a-page-property",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-retrieve-a-comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-query-data-source",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-retrieve-a-data-source",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-update-a-data-source",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-create-a-data-source",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-list-data-source-templates",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-retrieve-a-database",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "API-move-page",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:00:51.438Z"
   },
   {
@@ -2628,7 +16269,85 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"search-deals\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-deal-updates\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search-persons\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search-organizations\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search-leads\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search-all\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search-products\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-files\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "search-deals",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-deal-updates",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search-persons",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search-organizations",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search-leads",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search-all",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search-products",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-files",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:13:38.443Z"
   },
   {
@@ -2658,7 +16377,69 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"get_subreddit\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_posts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_submission\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_comments_by_submission\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_subreddits\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "get_subreddit",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_posts",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_submission",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_comments_by_submission",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_subreddits",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:22:20.373Z"
   },
   {
@@ -2691,7 +16472,155 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"set\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"hmset\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"hget\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"hgetall\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"scan\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"set\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"del\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"zadd\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"zrange\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"zrangebyscore\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"zrem\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"sadd\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"smembers\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"scan\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"del\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "set",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "hmset",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "hget",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "hgetall",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "scan",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "set",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "del",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "zadd",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "zrange",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "zrangebyscore",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "zrem",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "sadd",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "smembers",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "scan",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "del",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:11:59.240Z"
   },
   {
@@ -2726,7 +16655,166 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`destroy_repl_session` can permanently delete data — no guardrails, no confirmation required"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_session\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"send_input_to_session\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"send_signal_to_session\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"destroy_repl_session\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"set_session_ready\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_session\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"send_input_to_session\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"send_signal_to_session\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_session_details\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"destroy_repl_session\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"set_session_ready\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"wait_for_session\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"mark_session_failed\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_full_output\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_clean_text\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"send_input_to_session\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"list_repl_sessions\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"list_repl_configurations\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_session",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "send_input_to_session",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "send_signal_to_session",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "destroy_repl_session",
+          "action": "deny"
+        },
+        {
+          "tool": "set_session_ready",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_session",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "send_input_to_session",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "send_signal_to_session",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_session_details",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "destroy_repl_session",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "set_session_ready",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "wait_for_session",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "mark_session_failed",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_full_output",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_clean_text",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "send_input_to_session",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "list_repl_sessions",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "list_repl_configurations",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T14:31:11.808Z"
   },
   {
@@ -2758,7 +16846,347 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"get_products\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_product\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_product_variants\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_product_tags\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_product_types\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_product_vendors\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_products_count\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_orders\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_order\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_orders_count\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_abandoned_checkouts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_abandoned_checkouts_count\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_customers\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_customer\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_customers_count\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_segments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_segment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_segment_members\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_marketing_activities\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_marketing_activity\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_marketing_events\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_marketing_event\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_discounts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_discount\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_code_discounts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_automatic_discounts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_collections\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_collections_count\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_inventory_items\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_inventory_item\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_locations\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_location\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_product\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_customers\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_collection\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_locations\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_shop_locales\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "get_products",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_product",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_product_variants",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_product_tags",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_product_types",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_product_vendors",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_products_count",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_orders",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_order",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_orders_count",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_abandoned_checkouts",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_abandoned_checkouts_count",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_customers",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_customer",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_customers_count",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_segments",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_segment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_segment_members",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_marketing_activities",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_marketing_activity",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_marketing_events",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_marketing_event",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_discounts",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_discount",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_code_discounts",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_automatic_discounts",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_collections",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_collection",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_collections_count",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_inventory_items",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_inventory_item",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_locations",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_location",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_product",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_customers",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_collection",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_locations",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_shop_locales",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:15:24.914Z"
   },
   {
@@ -2788,7 +17216,29 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"current_user\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"ping\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "current_user",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "ping",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:14:52.655Z"
   },
   {
@@ -2817,7 +17267,105 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"providerDetails\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"resourceUsage\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"moduleSearch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"listDataSources\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"resourceArgumentDetails\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"moduleDetails\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"functionDetails\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"providerGuides\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"policySearch\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"policyDetails\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "providerDetails",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "resourceUsage",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "moduleSearch",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "listDataSources",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "resourceArgumentDetails",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "moduleDetails",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "functionDetails",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "providerGuides",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "policySearch",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "policyDetails",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T14:18:03.595Z"
   },
   {
@@ -2851,7 +17399,97 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"send_sms\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_conversation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"send_sms\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_inbound_messages\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_conversation_thread\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_message_status\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"send_sms\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_inbound_messages\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_conversation_thread\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"get_message_status\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "send_sms",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "create_conversation",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "send_sms",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_inbound_messages",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_conversation_thread",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_message_status",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "send_sms",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_inbound_messages",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_conversation_thread",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "get_message_status",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:08:26.175Z"
   },
   {
@@ -2890,7 +17528,61 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"execute_api_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"fetch_swagger_info\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_endpoint_details\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"execute_api_request\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"validate_api_response\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "execute_api_request",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "fetch_swagger_info",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_endpoint_details",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "execute_api_request",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "validate_api_response",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T14:27:03.484Z"
   },
   {
@@ -2923,7 +17615,85 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"create_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search_issues\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_user_issues\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"add_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"add_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create_issue",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update_issue",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "create_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search_issues",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_user_issues",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "add_comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "add_comment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T14:52:26.688Z"
   },
   {
@@ -2956,7 +17726,67 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"create-post\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"update-post\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"write-agent\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"search-posts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"create-post\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"update-post\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"search-posts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "create-post",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "update-post",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "write-agent"
+            ]
+          }
+        },
+        {
+          "tool": "search-posts",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "create-post",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "update-post",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "search-posts",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:15:15.585Z"
   },
   {
@@ -3000,7 +17830,33 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`getApiOperation` response may leak secrets or API keys based on tool description"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"getApiOverview\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"getApiOperation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "getApiOverview",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "getApiOperation",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T14:27:04.934Z"
   },
   {
@@ -3038,7 +17894,73 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"gist_delete\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"gist_get\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gist_create\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gist_update\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gist_delete\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gist_star\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"gist_unstar\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "gist_delete",
+          "action": "deny"
+        },
+        {
+          "tool": "gist_get",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gist_create",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gist_update",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gist_delete",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gist_star",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "gist_unstar",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:08:57.939Z"
   },
   {
@@ -3067,7 +17989,87 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"opsgenie_list_alerts\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"opsgenie_create_alert\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"opsgenie_acknowledge_alert\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"opsgenie_close_alert\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"opsgenie_list_alert_notes\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"opsgenie_add_note\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"opsgenie_list_alert_logs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"opsgenie_add_details\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "opsgenie_list_alerts",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "opsgenie_create_alert",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "opsgenie_acknowledge_alert",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "opsgenie_close_alert",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "opsgenie_list_alert_notes",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "opsgenie_add_note",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "opsgenie_list_alert_logs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "opsgenie_add_details",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:21:36.819Z"
   },
   {
@@ -3097,7 +18099,78 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"puppeteer_navigate\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"puppeteer_screenshot\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"puppeteer_click\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"puppeteer_fill\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"puppeteer_select\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"puppeteer_hover\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"puppeteer_evaluate\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "puppeteer_navigate",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "puppeteer_screenshot",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "puppeteer_click",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "puppeteer_fill",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "puppeteer_select",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "puppeteer_hover",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "puppeteer_evaluate",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T20:21:42.712Z"
   },
   {
@@ -3127,7 +18200,67 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"linear_create_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_update_issue\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_search_issues\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_get_user_issues\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_add_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"linear_add_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "linear_create_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_update_issue",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_search_issues",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_get_user_issues",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_add_comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "linear_add_comment",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:24:09.998Z"
   },
   {
@@ -3165,7 +18298,61 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"execute_functionality\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"search_docs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"list_functionality\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_functionality_details\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"execute_functionality\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "execute_functionality",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "search_docs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "list_functionality",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_functionality_details",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "execute_functionality",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:57:16.542Z"
   },
   {
@@ -3194,7 +18381,78 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"puppeteer_navigate\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"puppeteer_screenshot\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"puppeteer_click\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"puppeteer_fill\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"puppeteer_select\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"puppeteer_hover\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"puppeteer_evaluate\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "puppeteer_navigate",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "puppeteer_screenshot",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "puppeteer_click",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "puppeteer_fill",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "puppeteer_select",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "puppeteer_hover",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "puppeteer_evaluate",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:04:06.978Z"
   },
   {
@@ -3225,7 +18483,69 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"post_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"allowedDomains\": [\n          \"yourdomain.com\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"add_figma_file\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"view_node\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"read_comments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"post_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"reply_to_comment\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "post_comment",
+          "action": "allow",
+          "where": {
+            "allowedDomains": [
+              "yourdomain.com"
+            ]
+          }
+        },
+        {
+          "tool": "add_figma_file",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "view_node",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "read_comments",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "post_comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "reply_to_comment",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:02:00.167Z"
   },
   {
@@ -3264,7 +18584,34 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"run_command\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"run_command\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "run_command",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "run_command",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:25:36.390Z"
   },
   {
@@ -3303,7 +18650,53 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"remove-pdf-pages\",\n      \"action\": \"deny\"\n    },\n    {\n      \"tool\": \"remove-pdf-pages\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"add-text-watermark\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"merge-pdfs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"merge-pdfs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "remove-pdf-pages",
+          "action": "deny"
+        },
+        {
+          "tool": "remove-pdf-pages",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "add-text-watermark",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "merge-pdfs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "merge-pdfs",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:25:07.743Z"
   },
   {
@@ -3341,7 +18734,34 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"execute\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"execute\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "execute",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "execute",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:25:46.684Z"
   },
   {
@@ -3380,7 +18800,34 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"run_code\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"run_code\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "run_code",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "run_code",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:48:37.268Z"
   },
   {
@@ -3419,7 +18866,34 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"run_process\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"run_process\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "run_process",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "run_process",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:25:46.484Z"
   },
   {
@@ -3448,7 +18922,60 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"tavily_search\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"tavily_extract\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"tavily_crawl\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"tavily_map\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"tavily_research\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "tavily_search",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "tavily_extract",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "tavily_crawl",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "tavily_map",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "tavily_research",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:19:42.088Z"
   },
   {
@@ -3484,7 +19011,42 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`web_search_exa` response may leak secrets or API keys based on tool description"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"web_search_exa\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"crawling_exa\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_code_context_exa\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "web_search_exa",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "crawling_exa",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_code_context_exa",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:04:21.479Z"
   },
   {
@@ -3522,7 +19084,34 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"execute-command\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"execute-command\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "execute-command",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "execute-command",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:58:22.627Z"
   },
   {
@@ -3560,7 +19149,34 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"run_command\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"callerTag\": [\n          \"ci\",\n          \"dev\"\n        ]\n      }\n    },\n    {\n      \"tool\": \"run_command\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "run_command",
+          "action": "allow",
+          "where": {
+            "callerTag": [
+              "ci",
+              "dev"
+            ]
+          }
+        },
+        {
+          "tool": "run_command",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:08:55.555Z"
   },
   {
@@ -3591,7 +19207,33 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"resolve-library-id\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"query-docs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "resolve-library-id",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "query-docs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:53:41.331Z"
   },
   {
@@ -3628,7 +19270,24 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "`sequentialthinking` response may leak secrets or API keys based on tool description"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"sequentialthinking\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "sequentialthinking",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:00:28.654Z"
   },
   {
@@ -3657,7 +19316,33 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"list-objects\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get-object\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "list-objects",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get-object",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:12:29.298Z"
   },
   {
@@ -3687,7 +19372,24 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"hello_tool\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "hello_tool",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:58:19.947Z"
   },
   {
@@ -3717,7 +19419,31 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"nx_docs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"nx_docs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"pathScope\": \"{{project_root}}\"\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "nx_docs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "nx_docs",
+          "action": "allow",
+          "where": {
+            "pathScope": "{{project_root}}"
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:44:37.792Z"
   },
   {
@@ -3746,7 +19472,33 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"get_video_info\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"get_video_comments\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "get_video_info",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "get_video_comments",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:44:45.716Z"
   },
   {
@@ -3775,7 +19527,24 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"crypto-price\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "crypto-price",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:22:59.340Z"
   },
   {
@@ -3804,7 +19573,24 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"get_latest_failed_run_logs\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "get_latest_failed_run_logs",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T16:35:38.251Z"
   },
   {
@@ -3833,7 +19619,24 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"remotion-documentation\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "remotion-documentation",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:40:45.611Z"
   },
   {
@@ -3862,7 +19665,24 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"get_transcript\",\n      \"action\": \"allow\",\n      \"where\": {\n        \"maxLength\": {\n          \"query\": 500\n        }\n      }\n    },\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "get_transcript",
+          "action": "allow",
+          "where": {
+            "maxLength": {
+              "query": 500
+            }
+          }
+        },
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:22:30.308Z"
   },
   {
@@ -3891,7 +19711,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:06:12.505Z"
   },
   {
@@ -3919,7 +19747,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:08:52.308Z"
   },
   {
@@ -3947,7 +19783,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:19:28.767Z"
   },
   {
@@ -3975,7 +19819,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:41:35.721Z"
   },
   {
@@ -4003,7 +19855,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:54:31.442Z"
   },
   {
@@ -4031,7 +19891,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:19:03.721Z"
   },
   {
@@ -4059,7 +19927,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:20:32.225Z"
   },
   {
@@ -4087,7 +19963,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:52:41.677Z"
   },
   {
@@ -4115,7 +19999,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:51:44.364Z"
   },
   {
@@ -4143,7 +20035,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T20:22:36.102Z"
   },
   {
@@ -4171,7 +20071,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:53:39.721Z"
   },
   {
@@ -4199,7 +20107,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:47:49.709Z"
   },
   {
@@ -4227,7 +20143,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:06:37.568Z"
   },
   {
@@ -4255,7 +20179,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:48:14.769Z"
   },
   {
@@ -4283,7 +20215,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T17:57:01.364Z"
   },
   {
@@ -4311,7 +20251,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T17:53:55.989Z"
   },
   {
@@ -4339,7 +20287,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:17:48.562Z"
   },
   {
@@ -4367,7 +20323,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:20:07.154Z"
   },
   {
@@ -4395,7 +20359,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:49:02.327Z"
   },
   {
@@ -4423,7 +20395,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:49:27.386Z"
   },
   {
@@ -4451,7 +20431,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:20:57.298Z"
   },
   {
@@ -4479,7 +20467,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:53:06.722Z"
   },
   {
@@ -4507,7 +20503,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:45:33.948Z"
   },
   {
@@ -4535,7 +20539,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:17:23.499Z"
   },
   {
@@ -4563,7 +20575,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:03:05.164Z"
   },
   {
@@ -4591,7 +20611,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:16:51.125Z"
   },
   {
@@ -4619,7 +20647,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:07:41.453Z"
   },
   {
@@ -4647,7 +20683,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:43:20.630Z"
   },
   {
@@ -4675,7 +20719,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:57:41.611Z"
   },
   {
@@ -4703,7 +20755,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:58:06.661Z"
   },
   {
@@ -4731,7 +20791,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:09:22.985Z"
   },
   {
@@ -4759,7 +20827,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:21:22.381Z"
   },
   {
@@ -4787,7 +20863,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:18:38.656Z"
   },
   {
@@ -4815,7 +20899,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:09:51.442Z"
   },
   {
@@ -4843,7 +20935,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:52:16.605Z"
   },
   {
@@ -4871,7 +20971,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:43:45.670Z"
   },
   {
@@ -4899,7 +21007,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:45:59.021Z"
   },
   {
@@ -4927,7 +21043,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:54:06.373Z"
   },
   {
@@ -4955,7 +21079,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:50:00.893Z"
   },
   {
@@ -4983,7 +21115,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T17:56:08.091Z"
   },
   {
@@ -5011,7 +21151,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T20:21:59.002Z"
   },
   {
@@ -5039,7 +21187,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T20:21:36.552Z"
   },
   {
@@ -5067,7 +21223,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:50:29.173Z"
   },
   {
@@ -5095,7 +21259,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:10:16.494Z"
   },
   {
@@ -5123,7 +21295,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T15:12:24.289Z"
   },
   {
@@ -5151,7 +21331,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:44:35.818Z"
   },
   {
@@ -5179,7 +21367,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:10:41.578Z"
   },
   {
@@ -5207,7 +21403,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:41:10.654Z"
   },
   {
@@ -5235,7 +21439,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:46:24.093Z"
   },
   {
@@ -5263,7 +21475,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:02:25.215Z"
   },
   {
@@ -5291,7 +21511,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:44:10.746Z"
   },
   {
@@ -5319,7 +21547,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:50:54.221Z"
   },
   {
@@ -5347,7 +21583,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-30T14:49:06.649Z"
   },
   {
@@ -5375,7 +21619,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:01:16.497Z"
   },
   {
@@ -5403,7 +21655,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T17:53:55.992Z"
   },
   {
@@ -5431,7 +21691,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T17:53:55.989Z"
   },
   {
@@ -5459,7 +21727,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:07:02.613Z"
   },
   {
@@ -5487,7 +21763,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:01:57.401Z"
   },
   {
@@ -5515,7 +21799,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:11:06.640Z"
   },
   {
@@ -5543,7 +21835,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:42:51.593Z"
   },
   {
@@ -5571,7 +21871,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:42:25.816Z"
   },
   {
@@ -5599,7 +21907,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T19:51:19.297Z"
   },
   {
@@ -5627,7 +21943,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T18:18:13.613Z"
   },
   {
@@ -5655,7 +21979,15 @@ export const HALL_SERVERS: readonly HallServer[] = [
         "description": "Server exposes no auth mechanism — accepts connections from any unauthenticated agent"
       }
     ],
-    "mapPolicy": "{\n  \"version\": \"1.0\",\n  \"rules\": [\n    {\n      \"tool\": \"*\",\n      \"action\": \"allow\"\n    }\n  ]\n}",
+    "mapPolicy": {
+      "version": "1.0",
+      "rules": [
+        {
+          "tool": "*",
+          "action": "allow"
+        }
+      ]
+    },
     "scannedAt": "2026-03-29T17:56:33.149Z"
   }
 ] as const;

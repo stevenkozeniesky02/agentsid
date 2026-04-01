@@ -138,7 +138,7 @@ const ServerCard = ({ server }: { readonly server: HallServer }) => {
                     Fix — drop this <span className="font-mono normal-case">agentsid.json</span> in your repo
                   </p>
                   <pre className="text-[11px] font-mono text-emerald-400/80 bg-emerald-950/20 border border-emerald-900/30 rounded-lg p-3 overflow-x-auto leading-relaxed">
-                    {server.mapPolicy}
+                    {JSON.stringify(server.mapPolicy, null, 2)}
                   </pre>
                   <p className="text-[10px] text-muted-foreground/50 mt-2">
                     Then wrap: <span className="font-mono">npx @agentsid/proxy run --policy agentsid.json -- npx {server.package}</span>
