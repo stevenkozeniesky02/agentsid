@@ -193,7 +193,7 @@ async def registry_lookup(slug: str):
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 # React SPA — serve static files from dist + catch-all for client-side routing
-SPA_ROUTES = {"/", "/dashboard", "/docs", "/guides", "/terms", "/privacy", "/blog", "/spec", "/hall-of-mcps"}
+SPA_ROUTES = {"/", "/dashboard", "/docs", "/guides", "/terms", "/privacy", "/blog", "/spec", "/hall-of-mcps", "/research"}
 
 
 @app.get("/{full_path:path}", include_in_schema=False)
