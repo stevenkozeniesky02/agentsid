@@ -15,6 +15,8 @@ import { OverviewTab } from "../components/dashboard/OverviewTab";
 import { AgentCards } from "../components/dashboard/AgentCards";
 import { AuditFeed } from "../components/dashboard/AuditFeed";
 import { SettingsTab } from "../components/dashboard/SettingsTab";
+import { PoliciesTab } from "../components/dashboard/PoliciesTab";
+import { TeamTab } from "../components/dashboard/TeamTab";
 import { OnboardingWizard } from "../components/dashboard/OnboardingWizard";
 import { RegisterAgentModal } from "../components/dashboard/RegisterAgentModal";
 import { DashboardSkeleton } from "../components/dashboard/Skeletons";
@@ -311,6 +313,12 @@ function Dashboard() {
               auditStats={auditStats}
             />
           )}
+          {activeTab === "policies" && (
+            <PoliciesTab
+              apiKey={apiKey}
+              agents={agents}
+            />
+          )}
           {activeTab === "audit" && (
             <AuditFeed
               apiKey={apiKey}
@@ -319,6 +327,9 @@ function Dashboard() {
               auditStats={auditStats}
               isActive={activeTab === "audit"}
             />
+          )}
+          {activeTab === "team" && (
+            <TeamTab apiKey={apiKey} />
           )}
           {activeTab === "settings" && (
             <SettingsTab

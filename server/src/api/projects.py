@@ -52,7 +52,7 @@ async def _verify_supabase_user(token: str) -> dict:
             raise HTTPException(status_code=503, detail="Authentication service not configured")
         return {"email": "dev@local", "id": "dev_user"}
 
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=5.0) as client:
         response = await client.get(
             f"{settings.supabase_url}/auth/v1/user",
             headers={

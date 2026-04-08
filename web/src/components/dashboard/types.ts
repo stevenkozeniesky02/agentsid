@@ -111,4 +111,19 @@ export interface Personality {
 
 export type AuthTab = "signin" | "signup" | "apikey";
 
-export type SidebarTab = "overview" | "agents" | "audit" | "settings";
+export type SidebarTab = "overview" | "agents" | "policies" | "audit" | "team" | "settings";
+
+export interface TeamMember {
+  readonly email: string;
+  readonly role: "owner" | "admin" | "member" | "viewer";
+  readonly invited_at: string;
+  readonly joined_at: string | null;
+}
+
+export interface TeamInfo {
+  readonly id: string;
+  readonly name: string;
+  readonly owner_email: string;
+  readonly created_at: string;
+  readonly members: readonly TeamMember[];
+}

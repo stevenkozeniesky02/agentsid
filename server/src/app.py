@@ -15,7 +15,6 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
-from slowapi.util import get_remote_address
 
 from src.api.agents import router as agents_router
 from src.api.approvals import router as approvals_router
@@ -23,6 +22,7 @@ from src.api.audit import router as audit_router
 from src.api.permissions import router as permissions_router
 from src.api.projects import router as projects_router
 from src.api.validate import router as validate_router
+from src.api.teams import router as teams_router
 from src.api.webhooks import router as webhooks_router
 from src.core.config import settings
 
@@ -44,7 +44,18 @@ if settings.sentry_dsn:
         environment="production",
     )
 
-limiter = Limiter(key_func=get_remote_address)
+def _get_real_ip(request: Request) -> str:
+    """Get real client IP behind Cloudflare/proxy."""
+    cf_ip = request.headers.get("CF-Connecting-IP")
+    if cf_ip:
+        return cf_ip
+    xff = request.headers.get("X-Forwarded-For")
+    if xff:
+        return xff.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
+
+
+limiter = Limiter(key_func=_get_real_ip)
 
 app = FastAPI(
     title="AgentsID",
@@ -71,6 +82,7 @@ app.include_router(permissions_router, prefix="/api/v1")
 app.include_router(validate_router, prefix="/api/v1")
 app.include_router(approvals_router, prefix="/api/v1")
 app.include_router(audit_router, prefix="/api/v1")
+app.include_router(teams_router, prefix="/api/v1")
 app.include_router(webhooks_router, prefix="/api/v1")
 
 
@@ -94,7 +106,8 @@ async def security_headers(request: Request, call_next):
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Cache-Control"] = "no-store"
-    response.headers["X-Request-ID"] = request.headers.get("X-Request-ID", "")
+    import uuid
+    response.headers["X-Request-ID"] = request.headers.get("X-Request-ID") or str(uuid.uuid4())
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; "
         "script-src 'self' 'unsafe-inline'; "
@@ -133,6 +146,29 @@ async def run_migrations():
         await conn.execute(text("ALTER TABLE permission_rules ADD COLUMN IF NOT EXISTS session_limits JSONB"))
         await conn.execute(text("ALTER TABLE permission_rules ADD COLUMN IF NOT EXISTS risk_score_threshold INTEGER"))
         await conn.execute(text("ALTER TABLE permission_rules ADD COLUMN IF NOT EXISTS anomaly_detection JSONB"))
+        # Teams
+        await conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS teams (
+                id VARCHAR(50) PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                owner_email VARCHAR(255) NOT NULL,
+                created_at TIMESTAMPTZ DEFAULT NOW()
+            )
+        """))
+        await conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS team_members (
+                id SERIAL PRIMARY KEY,
+                team_id VARCHAR(50) NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+                email VARCHAR(255) NOT NULL,
+                role VARCHAR(20) NOT NULL,
+                invited_at TIMESTAMPTZ DEFAULT NOW(),
+                joined_at TIMESTAMPTZ,
+                UNIQUE(team_id, email)
+            )
+        """))
+        await conn.execute(text(
+            "ALTER TABLE projects ADD COLUMN IF NOT EXISTS team_id VARCHAR(50) REFERENCES teams(id)"
+        ))
 
 
 @app.get("/health")

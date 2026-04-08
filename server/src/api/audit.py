@@ -1,6 +1,12 @@
 """Audit log query routes."""
 
+import csv
+import io
+import json
+import re
+
 from fastapi import APIRouter, Depends, Query, Request
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from slowapi import Limiter
 from slowapi.util import get_remote_address
@@ -89,6 +95,72 @@ async def verify_audit_chain(
     Detects if any entries have been tampered with."""
     svc = AuditService(db)
     return await svc.verify_chain(project.id)
+
+
+@router.get("/export")
+@limiter.limit("10/minute")
+async def export_audit_log(
+    request: Request,
+    format: str = Query("json", regex="^(json|csv)$"),
+    agent_id: str | None = Query(None),
+    tool: str | None = Query(None),
+    action: str | None = Query(None),
+    since: str | None = Query(None, description="ISO 8601 datetime"),
+    limit: int = Query(1000, ge=1, le=10000),
+    project: Project = Depends(get_project),
+    db: AsyncSession = Depends(get_db),
+):
+    """Export audit log as downloadable JSON or CSV file."""
+    svc = AuditService(db)
+    result = await svc.query(
+        project_id=project.id,
+        agent_id=agent_id,
+        tool=tool,
+        action=action,
+        since=since,
+        limit=limit,
+        offset=0,
+    )
+
+    entries = result["entries"]
+    safe_id = re.sub(r"[^a-zA-Z0-9_\-]", "", project.id)
+    filename = f"agentsid-audit-{safe_id}"
+
+    if format == "csv":
+        if not entries:
+            output = io.StringIO("No audit entries found.\n")
+        else:
+            output = io.StringIO()
+            fieldnames = ["id", "agent_id", "tool", "action", "result", "created_at",
+                          "delegated_by", "delegation_chain", "error_message", "params"]
+            writer = csv.DictWriter(output, fieldnames=fieldnames, extrasaction="ignore")
+            writer.writeheader()
+            for entry in entries:
+                row = dict(entry)
+                if "params" in row and isinstance(row["params"], dict):
+                    row["params"] = json.dumps(row["params"])
+                if "delegation_chain" in row and isinstance(row["delegation_chain"], list):
+                    row["delegation_chain"] = json.dumps(row["delegation_chain"])
+                # Sanitize CSV cells against formula injection
+                for key in row:
+                    val = row[key]
+                    if isinstance(val, str) and val and val[0] in ("=", "+", "-", "@", "\t", "\r"):
+                        row[key] = "'" + val
+                writer.writerow(row)
+        output.seek(0)
+        return StreamingResponse(
+            output,
+            media_type="text/csv",
+            headers={"Content-Disposition": f'attachment; filename="{filename}.csv"'},
+        )
+
+    # JSON format
+    output = json.dumps({"entries": entries, "total": result["total"]}, indent=2, default=str)
+    return StreamingResponse(
+        io.StringIO(output),
+        media_type="application/json",
+        headers={"Content-Disposition": f'attachment; filename="{filename}.json"'},
+    )
 
 
 class UsageResponse(BaseModel):

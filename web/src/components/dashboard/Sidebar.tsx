@@ -16,7 +16,9 @@ interface SidebarProps {
 const NAV_ITEMS: readonly { readonly tab: SidebarTab; readonly icon: string; readonly label: string }[] = [
   { tab: "overview", icon: "\u25C9", label: "Command Center" },
   { tab: "agents", icon: "\u25C8", label: "Agents" },
+  { tab: "policies", icon: "\u26A1", label: "Policies" },
   { tab: "audit", icon: "\u2630", label: "Audit Feed" },
+  { tab: "team", icon: "\u2660", label: "Team" },
   { tab: "settings", icon: "\u2699", label: "Settings" },
 ];
 

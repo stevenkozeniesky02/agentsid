@@ -11,6 +11,43 @@ class Base(DeclarativeBase):
     pass
 
 
+class Team(Base):
+    """A team that owns projects. Multiple members with roles."""
+
+    __tablename__ = "teams"
+
+    id: Mapped[str] = mapped_column(String(50), primary_key=True)  # team_<random>
+    name: Mapped[str] = mapped_column(String(255))
+    owner_email: Mapped[str] = mapped_column(String(255), index=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+    members: Mapped[list["TeamMember"]] = relationship(back_populates="team", cascade="all, delete")
+    projects: Mapped[list["Project"]] = relationship(back_populates="team")
+
+
+class TeamMember(Base):
+    """A member of a team with a specific role."""
+
+    __tablename__ = "team_members"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    team_id: Mapped[str] = mapped_column(ForeignKey("teams.id", ondelete="CASCADE"), index=True)
+    email: Mapped[str] = mapped_column(String(255), index=True)
+    role: Mapped[str] = mapped_column(String(20))  # owner, admin, member, viewer
+    invited_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    joined_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+    team: Mapped["Team"] = relationship(back_populates="members")
+
+    __table_args__ = (
+        Index("ix_team_member_unique", "team_id", "email", unique=True),
+    )
+
+
 class Project(Base):
     """A customer project. One project = one API key = one namespace."""
 
@@ -21,11 +58,13 @@ class Project(Base):
     api_key_hash: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     api_key_encrypted: Mapped[str | None] = mapped_column(Text, nullable=True)
     owner_email: Mapped[str | None] = mapped_column(String(255))
+    team_id: Mapped[str | None] = mapped_column(ForeignKey("teams.id"), index=True)
     plan: Mapped[str] = mapped_column(String(50), server_default="free")
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
 
+    team: Mapped["Team | None"] = relationship(back_populates="projects")
     agents: Mapped[list["Agent"]] = relationship(back_populates="project", cascade="all, delete")
 
 

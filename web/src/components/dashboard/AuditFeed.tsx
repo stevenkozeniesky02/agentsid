@@ -229,6 +229,7 @@ function AuditFeed({
             {verifying ? "Verifying..." : "Verify Chain"}
           </span>
         </button>
+        <ExportDropdown apiKey={apiKey} filters={filters} />
         <div className="flex items-center gap-1.5 text-xs text-green-600 font-semibold ml-auto tracking-wider">
           <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
           Live
@@ -519,6 +520,91 @@ function AuditRow({
         </tr>
       )}
     </>
+  );
+}
+
+// --- Export Dropdown ---
+
+interface ExportDropdownProps {
+  readonly apiKey: string;
+  readonly filters: { agent_id: string; tool: string; action: string };
+}
+
+function ExportDropdown({ apiKey, filters }: ExportDropdownProps) {
+  const [open, setOpen] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState("");
+
+  const handleExport = useCallback(
+    async (format: "json" | "csv") => {
+      setExporting(true);
+      setExportError("");
+      setOpen(false);
+      try {
+        let params = `?format=${format}&limit=10000`;
+        if (filters.agent_id)
+          params += "&agent_id=" + encodeURIComponent(filters.agent_id);
+        if (filters.tool)
+          params += "&tool=" + encodeURIComponent(filters.tool);
+        if (filters.action)
+          params += "&action=" + encodeURIComponent(filters.action);
+
+        const resp = await fetch(`/api/v1/audit/export${params}`, {
+          headers: { Authorization: `Bearer ${apiKey}` },
+        });
+
+        if (!resp.ok) throw new Error("Export failed");
+
+        const blob = await resp.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `agentsid-audit.${format}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch {
+        setExportError("Export failed. Try again.");
+      } finally {
+        setExporting(false);
+      }
+    },
+    [apiKey, filters],
+  );
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen((prev) => !prev)}
+        disabled={exporting}
+        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-border text-muted-foreground text-xs font-medium hover:border-primary/30 hover:text-foreground transition-all disabled:opacity-40"
+      >
+        {exporting ? "Exporting..." : exportError ? "Retry Export" : "Export"}
+        <span className="text-[10px]">{"\u25BE"}</span>
+      </button>
+      {exportError && (
+        <div className="absolute top-full mt-1 right-0 text-[10px] text-red-400 whitespace-nowrap">
+          {exportError}
+        </div>
+      )}
+      {open && (
+        <div className="absolute top-full mt-1 right-0 bg-card border border-border rounded-lg shadow-lg z-50 overflow-hidden min-w-[120px]">
+          <button
+            onClick={() => handleExport("json")}
+            className="w-full px-4 py-2 text-xs text-left hover:bg-primary/5 transition-colors text-foreground"
+          >
+            Export JSON
+          </button>
+          <button
+            onClick={() => handleExport("csv")}
+            className="w-full px-4 py-2 text-xs text-left hover:bg-primary/5 transition-colors text-foreground border-t border-border"
+          >
+            Export CSV
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 
