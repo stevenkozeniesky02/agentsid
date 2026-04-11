@@ -187,10 +187,11 @@ runs:
           }
 
           // ───── Build the comment ─────
+          // Only show delta when there's a meaningful change from the previous run.
           let deltaSuffix = "";
-          if (delta !== null) {
+          if (delta !== null && delta !== 0) {
             const sign = delta > 0 ? "+" : "";
-            deltaSuffix = " (" + sign + delta + " vs previous)";
+            deltaSuffix = " (" + sign + delta + " from last run)";
           }
 
           let md = "## AgentsID Security Scan: Grade " + grade + " (" + score + "/100)" + deltaSuffix + "\n\n";
