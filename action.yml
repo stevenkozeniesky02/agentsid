@@ -44,9 +44,9 @@ outputs:
   findings-high:
     description: 'Number of high findings'
     value: ${{ steps.scan.outputs.findings-high }}
-  report-json:
-    description: 'Full JSON report'
-    value: ${{ steps.scan.outputs.report-json }}
+  report-path:
+    description: 'Absolute path to the full JSON report file'
+    value: ${{ runner.temp }}/agentsid-report.json
 
 runs:
   using: 'composite'
@@ -91,7 +91,6 @@ runs:
 
         # Store full report for downstream steps
         echo "$REPORT" > "$RUNNER_TEMP/agentsid-report.json"
-        echo "report-json=$REPORT" >> "$GITHUB_OUTPUT"
 
         echo "Scan complete: Grade $GRADE ($SCORE/100) — $CRITICAL critical, $HIGH high"
 
