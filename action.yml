@@ -187,7 +187,7 @@ runs:
           }
 
           // ───── Build the comment ─────
-          // Only show delta when there's a meaningful change from the previous run.
+          // Only show delta when there is a meaningful change from the previous run.
           let deltaSuffix = "";
           if (delta !== null && delta !== 0) {
             const sign = delta > 0 ? "+" : "";
