@@ -66,8 +66,10 @@ GREEN='\033[0;32m'
 CYAN='\033[0;36m'
 RESET='\033[0m'
 
-# ── Branch: Task tool spawns a subagent ──────────────────────────────────────
-if [[ "$TOOL_NAME" == "Task" ]]; then
+# ── Branch: Task/Agent tool spawns a subagent ───────────────────────────────
+# Claude Code exposes this tool as "Agent" in tool_name (older name was "Task").
+# We match both for forward/backward compat.
+if [[ "$TOOL_NAME" == "Agent" ]] || [[ "$TOOL_NAME" == "Task" ]]; then
   # Extract subagent_type from tool_input.
   SUBAGENT_TYPE=$(printf '%s' "$TOOL_INPUT" | python3 -c "
 import sys, json
