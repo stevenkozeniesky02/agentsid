@@ -71,7 +71,7 @@ export function SubagentTree({ apiKey, rootAgentId }: SubagentTreeProps) {
     setLoading(true);
     setError("");
 
-    apiFetch<LineageNode>(apiKey, `/agents/${rootAgentId}/lineage`)
+    apiFetch<LineageNode>(`/agents/${rootAgentId}/lineage`, apiKey)
       .then((data) => {
         if (!cancelled) setTree(data);
       })
