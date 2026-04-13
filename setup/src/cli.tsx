@@ -11,6 +11,9 @@ import { assembleRules } from "./engine.js";
 import { developerPreset } from "./presets/developer.js";
 import { securityTeamPreset } from "./presets/security-team.js";
 import { lockdownPreset } from "./presets/lockdown.js";
+import { claudeCodeDeveloperPreset } from "./presets/claude-code/developer.js";
+import { claudeCodeSecurityTeamPreset } from "./presets/claude-code/security-team.js";
+import { claudeCodeLockdownPreset } from "./presets/claude-code/lockdown.js";
 import type { Platform } from "./steps/platform.js";
 import type { PersonaName } from "./steps/persona.js";
 import type { PolicyPreset, PolicyRule } from "./presets/types.js";
@@ -33,11 +36,21 @@ interface WizardState {
   readonly rules: readonly PolicyRule[];
 }
 
-const PRESET_MAP: Record<PersonaName, PolicyPreset> = {
+const DEFAULT_PRESETS: Record<PersonaName, PolicyPreset> = {
   developer: developerPreset,
   "security-team": securityTeamPreset,
   lockdown: lockdownPreset,
 };
+
+const CLAUDE_CODE_PRESETS: Record<PersonaName, PolicyPreset> = {
+  developer: claudeCodeDeveloperPreset,
+  "security-team": claudeCodeSecurityTeamPreset,
+  lockdown: claudeCodeLockdownPreset,
+};
+
+function getPresetMap(platform: Platform | null): Record<PersonaName, PolicyPreset> {
+  return platform === "claude-code" ? CLAUDE_CODE_PRESETS : DEFAULT_PRESETS;
+}
 
 const BANNER = `
      _                    _    ___ ____
@@ -78,7 +91,7 @@ function App(): React.ReactElement {
 
   function handlePoliciesComplete(toggleOverrides: Record<string, boolean>): void {
     if (!state.persona) return;
-    const preset = PRESET_MAP[state.persona];
+    const preset = getPresetMap(state.platform)[state.persona];
     const rules = assembleRules(preset, toggleOverrides);
     setState((prev) => ({ ...prev, step: "launch", rules }));
   }
@@ -104,7 +117,7 @@ function App(): React.ReactElement {
       )}
       {step === "policies" && persona && (
         <PoliciesStep
-          preset={PRESET_MAP[persona]}
+          preset={getPresetMap(state.platform)[persona]}
           onComplete={handlePoliciesComplete}
         />
       )}
