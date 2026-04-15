@@ -2,6 +2,8 @@ export interface IntegrationConfig {
   readonly apiKey: string;
   readonly agentToken: string;
   readonly scope: "global" | "project";
+  readonly agentId?: string;
+  readonly apiUrl?: string;
 }
 
 export interface PlatformIntegration {

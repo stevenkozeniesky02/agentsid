@@ -162,7 +162,13 @@ export function LaunchStep({
       try {
         const integration = INTEGRATIONS[platform];
         const agentToken = agent.token ?? agent.agent.id;
-        const config = integration.generateConfig({ apiKey, agentToken, scope: "global" });
+        const config = integration.generateConfig({
+          apiKey,
+          agentToken,
+          agentId: agent.agent.id,
+          apiUrl,
+          scope: "global",
+        });
         const configPath = integration.configPath("global");
         if (configPath) {
           await writeConfig(configPath, config, integration.configFormat);

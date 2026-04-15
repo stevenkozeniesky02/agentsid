@@ -19,7 +19,19 @@ export const claudeCodeIntegration: PlatformIntegration = {
 
   generateConfig(config: IntegrationConfig) {
     const hookDir = path.join(os.homedir(), ".agentsid", "hooks");
+
+    // Hook reads env from the TOP-LEVEL env block (Claude Code injects those
+    // into the hook process). mcpServer env is scoped to the MCP server only.
+    // We write to both so the hook can authenticate and the guard MCP has creds.
+    const hookEnv: Record<string, string> = {
+      AGENTSID_PROJECT_KEY: config.apiKey,
+      AGENTSID_AGENT_TOKEN: config.agentToken,
+    };
+    if (config.agentId) hookEnv.AGENTSID_AGENT_ID = config.agentId;
+    if (config.apiUrl) hookEnv.AGENTSID_API_URL = config.apiUrl;
+
     return {
+      env: hookEnv,
       hooks: {
         PreToolUse: [
           {

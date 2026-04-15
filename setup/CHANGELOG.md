@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.2] — 2026-04-15
+
+### Fixed
+- Claude Code integration now writes `AGENTSID_PROJECT_KEY`, `AGENTSID_AGENT_TOKEN`, `AGENTSID_AGENT_ID`, and `AGENTSID_API_URL` into the **top-level `env` block** of `.claude/settings.json`, not just `mcpServers.agentsid.env`. The PreToolUse hook reads from the top-level env block (that's where Claude Code injects hook-process environment). Previously, the hook would exit silently on every invocation because those vars were absent — effectively making AgentsID a no-op after setup.
+- `IntegrationConfig` now carries optional `agentId` and `apiUrl` so the integration can populate the full env block.
+
 ## [0.1.1] — 2026-04-15
 
 ### Fixed
