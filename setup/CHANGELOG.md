@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.1] — 2026-04-15
+
+### Fixed
+- Hook shell scripts (`pre-tool.sh`, `post-tool.sh`) were not bundled into `dist/` during build, causing `installHook()` to fail with "Hook source file not found" when installed from the published tarball. Build now copies `src/hook/*.sh` into `dist/hook/`.
+
 ## [0.1.0] — 2026-04-15
 
 ### Added

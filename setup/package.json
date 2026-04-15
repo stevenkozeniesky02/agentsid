@@ -1,6 +1,6 @@
 {
   "name": "@agentsid/setup",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Guided setup wizard for AgentsID — protect your AI agent in 2 minutes",
   "type": "module",
   "bin": {
@@ -8,14 +8,13 @@
   },
   "files": [
     "dist",
-    "src/hook/pre-tool.sh",
-    "src/hook/post-tool.sh",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run copy-assets",
+    "copy-assets": "mkdir -p dist/hook && cp src/hook/pre-tool.sh src/hook/post-tool.sh dist/hook/",
     "dev": "tsx src/cli.tsx",
     "test": "vitest run",
     "prepublishOnly": "npm run build && npm test"
