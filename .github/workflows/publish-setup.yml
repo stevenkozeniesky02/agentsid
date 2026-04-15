@@ -1,0 +1,64 @@
+name: Publish @agentsid/setup
+
+# Publishes @agentsid/setup to npm with provenance attestation.
+# Triggers on tags shaped `setup-v*` (e.g. setup-v0.1.0, setup-v1.0.0).
+# Provenance requires OIDC id-token and a Trusted Publisher or granular NPM_TOKEN.
+
+on:
+  push:
+    tags:
+      - "setup-v*"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run (build + test, skip publish)"
+        type: boolean
+        default: false
+
+jobs:
+  publish:
+    name: Build, test, publish
+    runs-on: ubuntu-latest
+    permissions:
+      # Required for npm provenance attestations (OIDC).
+      id-token: write
+      # Only needed if we create a GitHub release after publish (disabled below).
+      contents: read
+
+    defaults:
+      run:
+        working-directory: setup
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          registry-url: "https://registry.npmjs.org"
+          scope: "@agentsid"
+          cache: "npm"
+          cache-dependency-path: setup/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify tarball contents
+        run: npm pack --dry-run
+
+      - name: Publish to npm (with provenance)
+        if: ${{ !inputs.dry_run }}
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

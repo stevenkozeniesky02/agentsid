@@ -6,10 +6,19 @@
   "bin": {
     "agentsid-setup": "./dist/cli.js"
   },
+  "files": [
+    "dist",
+    "src/hook/pre-tool.sh",
+    "src/hook/post-tool.sh",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/cli.tsx",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prepublishOnly": "npm run build && npm test"
   },
   "dependencies": {
     "ink": "^5.1.0",
@@ -35,6 +44,22 @@
     "security",
     "mcp",
     "setup",
-    "cli"
-  ]
+    "cli",
+    "claude-code",
+    "cursor",
+    "agents"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AgentsID-dev/agentsid.git",
+    "directory": "setup"
+  },
+  "bugs": {
+    "url": "https://github.com/AgentsID-dev/agentsid/issues"
+  },
+  "homepage": "https://agentsid.dev",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
 }
