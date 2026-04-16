@@ -1,140 +1,72 @@
-import { useEffect, useRef, useState } from "react";
-import { motion, useInView, AnimatePresence } from "motion/react";
+import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { motion, useInView } from "motion/react";
 import { Button } from "@/components/ui/button";
-import { Particles } from "@/components/ui/particles";
-import { BorderBeam } from "@/components/ui/border-beam";
-import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
-import {
-  Shield,
-  Zap,
-  FileText,
-  Lock,
-  GitBranch,
-  Eye,
-  ArrowRight,
-  Check,
-  Terminal,
-  Copy,
-} from "lucide-react";
+import { GradeStamp, GradeChip, GRADE_COLORS } from "@/components/shared/grade";
+import { ArrowRight, Check, Copy, Terminal } from "lucide-react";
+import { HALL_STATS } from "./hall-of-mcps-data";
 
 // ---------------------------------------------------------------------------
-// Data
+// Content constants — DO NOT add fabricated citations. Every number must be
+// defensible if an investor or HN commenter asks "where's the source?"
+// Numbers pull from the live scanner index so paper/site/registry stay aligned.
 // ---------------------------------------------------------------------------
 
-const features = [
+const STATS = {
+  scanned: HALL_STATS.total.toLocaleString(),
+  findings: HALL_STATS.totalFindings.toLocaleString(),
+  papers: "5",
+  gradeF: HALL_STATS.fGrade.toLocaleString(),
+} as const;
+
+const RESEARCH = [
   {
-    icon: <Shield className="size-6" />,
-    title: "Deny-First Permissions",
-    description:
-      "Every tool call is blocked unless explicitly allowed. Wildcards, conditions, schedules, and rate limits.",
-    gradient: "from-amber-500/10 to-amber-900/10",
+    id: "01",
+    title: "Weaponized by Design",
+    desc: "Census of 15,982 MCP servers. 137,070 findings. 460 with deceptive language.",
+    meta: "paper · april 2026",
   },
   {
-    icon: <Lock className="size-6" />,
-    title: "HMAC-SHA256 Tokens",
-    description:
-      "Cryptographically signed agent tokens. No database lookup needed for validation. Supports key rotation.",
-    gradient: "from-amber-500/5 to-amber-900/5",
+    id: "02",
+    title: "Invisible Ink",
+    desc: "Unicode smuggling attacks on tool descriptions. 145 CRITICAL findings in the wild.",
+    meta: "paper · march 2026",
   },
   {
-    icon: <Eye className="size-6" />,
-    title: "Tamper-Evident Audit",
-    description:
-      "SHA-256 hash chain links every event. If anyone modifies a record, the chain breaks. Provable history.",
-    gradient: "from-amber-500/5 to-amber-900/5",
+    id: "03",
+    title: "Surface Area Paradox",
+    desc: "Why every MCP server with 21+ tools has CRITICAL findings. The data says prefer small.",
+    meta: "paper · march 2026",
   },
   {
-    icon: <GitBranch className="size-6" />,
-    title: "Approval Gates",
-    description:
-      "Sensitive actions pause for human approval. Email notifications, webhook triggers, time-boxed decisions.",
-    gradient: "from-amber-500/5 to-amber-900/5",
+    id: "04",
+    title: "Delegation Chains",
+    desc: "How subagents inherit — and sometimes escape — their parent's permissions.",
+    meta: "paper · feb 2026",
+  },
+];
+
+const FAQ = [
+  {
+    q: "Does this slow my agent down?",
+    a: "The pre-tool validation adds ~30ms per call. The hook is fail-open — if our API is unreachable, your tool calls proceed normally. We don't stand between your agent and its work.",
   },
   {
-    icon: <Zap className="size-6" />,
-    title: "MCP Native",
-    description:
-      "Built for Model Context Protocol. Validates every tool call in real-time. Works with Claude, Cursor, Codex.",
-    gradient: "from-amber-500/5 to-amber-900/5",
+    q: "How is this different from a tool registry?",
+    a: "Registries rate reliability. We rate intent. A tool with 99.9% uptime can still say 'secretly bypass approval' in its description. Uptime is orthogonal to malice.",
   },
   {
-    icon: <FileText className="size-6" />,
-    title: "Multi-Language SDKs",
-    description:
-      "TypeScript, Python, Ruby, Java. npm, PyPI, RubyGems. Drop-in middleware for any MCP server.",
-    gradient: "from-amber-500/5 to-amber-900/5",
+    q: "What agents do you support?",
+    a: "Claude Code (including subagents), Cursor, Codex. Generic MCP client integration via direct validator call.",
   },
-] as const;
-
-const codeLines = [
-  { text: "import", cls: "text-amber-400" },
-  { text: " { AgentsID } ", cls: "text-[#e4e4ef]" },
-  { text: "from", cls: "text-amber-400" },
-  { text: " '@agentsid/sdk'", cls: "text-green-400" },
-  { text: ";", cls: "text-[#e4e4ef]" },
-  { text: "\n\n", cls: "" },
-  { text: "const", cls: "text-amber-400" },
-  { text: " guard = ", cls: "text-[#e4e4ef]" },
-  { text: "new", cls: "text-amber-400" },
-  { text: " AgentsID", cls: "text-blue-400" },
-  { text: "({\n", cls: "text-[#e4e4ef]" },
-  { text: "  projectKey: ", cls: "text-[#e4e4ef]" },
-  { text: "process.env.", cls: "text-blue-400" },
-  { text: "AGENTSID_PROJECT_KEY", cls: "text-[#e4e4ef]" },
-  { text: ",\n", cls: "text-[#e4e4ef]" },
-  { text: "});\n\n", cls: "text-[#e4e4ef]" },
-  { text: "// Every tool call gets validated", cls: "text-gray-500" },
-  { text: "\n", cls: "" },
-  { text: "const", cls: "text-amber-400" },
-  { text: " result = ", cls: "text-[#e4e4ef]" },
-  { text: "await", cls: "text-amber-400" },
-  { text: " guard.", cls: "text-[#e4e4ef]" },
-  { text: "validate", cls: "text-blue-400" },
-  { text: "('delete_user'", cls: "text-green-400" },
-  { text: ", {\n  userId: ", cls: "text-[#e4e4ef]" },
-  { text: "'123'", cls: "text-green-400" },
-  { text: "\n});\n\n", cls: "text-[#e4e4ef]" },
-  { text: "if", cls: "text-amber-400" },
-  { text: " (!result.", cls: "text-[#e4e4ef]" },
-  { text: "allowed", cls: "text-blue-400" },
-  { text: ") {\n  ", cls: "text-[#e4e4ef]" },
-  { text: "console", cls: "text-blue-400" },
-  { text: ".log(", cls: "text-[#e4e4ef]" },
-  { text: "'Blocked:'", cls: "text-green-400" },
-  { text: ", result.reason);\n}", cls: "text-[#e4e4ef]" },
-] as const;
-
-const codeRaw = `import { AgentsID } from '@agentsid/sdk';
-
-const guard = new AgentsID({
-  projectKey: process.env.AGENTSID_PROJECT_KEY,
-});
-
-// Every tool call gets validated
-const result = await guard.validate('delete_user', {
-  userId: '123'
-});
-
-if (!result.allowed) {
-  console.log('Blocked:', result.reason);
-}`;
-
-const stats = [
-  { value: "<1ms", label: "Validation latency" },
-  { value: "4", label: "SDK languages" },
-  { value: "0", label: "DB lookups for auth" },
-  { value: "100%", label: "Audit coverage" },
-] as const;
-
-const proofPoints = [
-  { value: "15,982", label: "MCP Servers Scanned" },
-  { value: "5", label: "Published Papers" },
-  { value: "4", label: "SDKs Shipped" },
-  { value: "72%", label: "Fail Rate Found" },
-] as const;
+  {
+    q: "Is it open source?",
+    a: "The scanner and CLI are MIT. The server is source-available. The research is published.",
+  },
+];
 
 // ---------------------------------------------------------------------------
-// Animated section wrapper
+// Reveal helper
 // ---------------------------------------------------------------------------
 
 function FadeInSection({
@@ -152,9 +84,9 @@ function FadeInSection({
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-      transition={{ duration: 0.6, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
       className={className}
     >
       {children}
@@ -163,714 +95,899 @@ function FadeInSection({
 }
 
 // ---------------------------------------------------------------------------
-// Code block with syntax highlighting + copy
+// Ambient background atmosphere — amber glow top-left, red glow upper-right
 // ---------------------------------------------------------------------------
 
-function CodeBlock() {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(codeRaw).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
-
+function AmbientGlow() {
   return (
-    <div className="relative rounded-xl border border-border/50 bg-[#0f0f1a] overflow-hidden group">
-      <BorderBeam
-        size={200}
-        duration={8}
-        colorFrom="#f59e0b"
-        colorTo="#d97706"
-        borderWidth={1.5}
-      />
-      {/* Title bar */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
-        <div className="flex items-center gap-2">
-          <div className="flex gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-            <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
-            <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
-          </div>
-          <span className="text-[11px] text-white/30 font-mono ml-2">
-            guard.ts
-          </span>
-        </div>
-        <button
-          onClick={handleCopy}
-          className="flex items-center gap-1.5 text-[11px] text-white/40 hover:text-white/70 transition-colors"
-        >
-          {copied ? (
-            <>
-              <Check className="size-3" /> Copied
-            </>
-          ) : (
-            <>
-              <Copy className="size-3" /> Copy
-            </>
-          )}
-        </button>
-      </div>
-      {/* Code */}
-      <div className="p-5 overflow-x-auto">
-        <pre className="text-[13px] leading-relaxed font-mono">
-          <code>
-            {codeLines.map((token, i) => (
-              <span key={i} className={token.cls}>
-                {token.text}
-              </span>
-            ))}
-          </code>
-        </pre>
-      </div>
-    </div>
+    <div
+      aria-hidden
+      className="pointer-events-none fixed inset-0 z-0"
+      style={{
+        background:
+          "radial-gradient(ellipse 60% 40% at 20% 0%, rgba(245,158,11,0.08), transparent 70%), radial-gradient(ellipse 40% 30% at 90% 30%, rgba(239,68,68,0.05), transparent 70%)",
+      }}
+    />
   );
 }
 
 // ---------------------------------------------------------------------------
-// Feature card with hover glow
+// Hero live-deny card — a physical-feeling receipt showing a real deny event
 // ---------------------------------------------------------------------------
 
-function FeatureCard({
-  feature,
-  index,
-}: {
-  readonly feature: (typeof features)[number];
-  readonly index: number;
-}) {
+function LiveDenyCard() {
   return (
-    <FadeInSection delay={index * 0.08}>
-      <div className="group relative rounded-xl border border-border/50 bg-card p-6 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 overflow-hidden">
-        {/* Gradient glow on hover */}
+    <motion.div
+      initial={{ opacity: 0, rotate: -1, y: 20 }}
+      animate={{ opacity: 1, rotate: -2, y: 0 }}
+      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+      className="relative rounded-lg border border-border bg-card p-8"
+      style={{
+        width: 420,
+        boxShadow:
+          "0 30px 80px -20px rgba(0,0,0,0.8), 0 0 40px -10px rgba(239,68,68,0.25)",
+      }}
+    >
+      <div className="flex items-baseline justify-between border-b border-border pb-3 mb-5">
+        <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+          AgentsID audit · 14:32 UTC
+        </div>
         <div
-          className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
-        />
-        <div className="relative">
-          <div className="mb-4 inline-flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
-            {feature.icon}
-          </div>
-          <h3 className="text-lg font-semibold text-foreground mb-2">
-            {feature.title}
-          </h3>
-          <p className="text-muted-foreground text-sm leading-relaxed">
-            {feature.description}
-          </p>
+          className="font-mono text-[10px] uppercase tracking-[0.2em]"
+          style={{ color: GRADE_COLORS.F }}
+        >
+          live deny
         </div>
       </div>
-    </FadeInSection>
+      <div className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground mb-1">
+        attempted tool call
+      </div>
+      <div className="font-mono text-sm mb-4">Bash(npm test)</div>
+      <div className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground mb-1">
+        agent
+      </div>
+      <div className="font-mono text-sm mb-4">code-reviewer@claude</div>
+
+      <div className="mt-6 flex items-center gap-4">
+        <GradeStamp letter="F" size="xl" />
+        <div>
+          <div
+            className="text-xl font-extrabold tracking-tight"
+            style={{ color: GRADE_COLORS.F }}
+          >
+            Hostile
+          </div>
+          <div className="text-xs mt-1 text-muted-foreground">
+            rule #104 · block shell
+          </div>
+          <div className="text-xs text-muted-foreground">
+            12 CRITICAL findings
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 pt-4 border-t border-border font-mono text-[10px] text-muted-foreground">
+        block #002481 · hash 4a7f2e9b ← bf3e7d12 · ✓ chain verified
+      </div>
+    </motion.div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Animated counter
+// Install command with copy
 // ---------------------------------------------------------------------------
 
-function AnimatedStat({
-  value,
-  label,
-}: {
-  readonly value: string;
-  readonly label: string;
-}) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-
+function InstallBlock() {
+  const [copied, setCopied] = useState(false);
+  const cmd = "npx @agentsid/setup@latest";
   return (
-    <div ref={ref} className="text-center">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={
-          isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }
-        }
-        transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
-        className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary to-amber-400 bg-clip-text text-transparent mb-1"
+    <div className="relative inline-flex items-center gap-3 rounded-lg bg-black border border-border px-5 py-3 font-mono text-sm">
+      <Terminal className="size-4 text-primary" />
+      <span className="text-foreground">
+        $ npx <span style={{ color: GRADE_COLORS.C }}>@agentsid/setup</span>@latest
+      </span>
+      <button
+        aria-label="Copy install command"
+        onClick={() => {
+          navigator.clipboard.writeText(cmd).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1800);
+          });
+        }}
+        className="ml-2 inline-flex h-7 w-7 items-center justify-center rounded text-muted-foreground hover:text-foreground hover:bg-card"
       >
-        {value}
-      </motion.div>
-      <div className="text-sm text-muted-foreground">{label}</div>
+        {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+      </button>
     </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// How it works step
+// Event row — reused inline in the Enforcement card
 // ---------------------------------------------------------------------------
 
-const howItWorks = [
-  {
-    step: "1",
-    title: "Install",
-    desc: "Add the SDK to your project with one command.",
-    code: "npm install @agentsid/sdk",
-  },
-  {
-    step: "2",
-    title: "Register",
-    desc: "Create an agent identity with scoped permissions.",
-    code: "aid.registerAgent({ name: 'my-agent' })",
-  },
-  {
-    step: "3",
-    title: "Validate",
-    desc: "Check every tool call against the permission set.",
-    code: "aid.validate('tool_name', params)",
-  },
-] as const;
-
-// ---------------------------------------------------------------------------
-// Interactive Demo data
-// ---------------------------------------------------------------------------
-
-const demoTools = [
-  {
-    name: "search_web",
-    allowed: true,
-    reason: 'Matched rule: search_*',
-    result: '{ allowed: true, reason: "Matched rule: search_*" }',
-  },
-  {
-    name: "save_memory",
-    allowed: true,
-    reason: 'Matched rule: save_memory',
-    result: '{ allowed: true, reason: "Matched rule: save_memory" }',
-  },
-  {
-    name: "delete_user",
-    allowed: false,
-    reason: 'No matching allow rule',
-    result: '{ allowed: false, reason: "No matching allow rule" }',
-  },
-] as const;
-
-const permissionRules = [
-  { pattern: "search_*", type: "allow" as const },
-  { pattern: "save_memory", type: "allow" as const },
-  { pattern: "delete_*", type: "deny" as const },
-  { pattern: "All other tools", type: "default" as const },
-] as const;
-
-// ---------------------------------------------------------------------------
-// Interactive Demo
-// ---------------------------------------------------------------------------
-
-function InteractiveDemo() {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [showResult, setShowResult] = useState(false);
-  const [hasAutoPlayed, setHasAutoPlayed] = useState(false);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-
-  const selectedTool = selectedIndex !== null ? demoTools[selectedIndex] : null;
-
-  // Auto-play through all 3 tools on first view
-  useEffect(() => {
-    if (!isInView || hasAutoPlayed) return;
-    setHasAutoPlayed(true);
-
-    const timeouts: ReturnType<typeof setTimeout>[] = [];
-    demoTools.forEach((_, i) => {
-      timeouts.push(setTimeout(() => {
-        setShowResult(false);
-        setSelectedIndex(i);
-        timeouts.push(setTimeout(() => setShowResult(true), 300));
-      }, i * 1800));
-    });
-
-    return () => timeouts.forEach(clearTimeout);
-  }, [isInView, hasAutoPlayed]);
-
-  const handleToolClick = (index: number) => {
-    setShowResult(false);
-    setSelectedIndex(index);
-    setTimeout(() => setShowResult(true), 300);
-  };
+function EventRow({
+  kind,
+  tool,
+  note,
+}: {
+  kind: "allow" | "deny" | "derive";
+  tool: string;
+  note: string;
+}) {
+  const palette = {
+    allow: { bg: "rgba(16,185,129,0.08)", label: "✓ ALLOW", color: GRADE_COLORS.A },
+    deny: { bg: "rgba(239,68,68,0.12)", label: "⛔ DENY", color: GRADE_COLORS.F },
+    derive: { bg: "rgba(245,158,11,0.08)", label: "↗ DERIVE", color: "#f59e0b" },
+  }[kind];
 
   return (
-    <section ref={ref} className="py-16 lg:py-24 border-t border-border/30">
-      <div className="container mx-auto px-4 lg:px-8">
-        <FadeInSection>
-          <div className="text-center mb-14">
-            <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-foreground mb-4">
-              See it in action
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-              Click a tool to see how AgentsID validates agent requests in
-              real-time.
-            </p>
-          </div>
-        </FadeInSection>
-
-        <FadeInSection delay={0.1}>
-          {/* Tool buttons */}
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
-            {demoTools.map((tool, i) => (
-              <button
-                key={tool.name}
-                onClick={() => handleToolClick(i)}
-                className={`px-4 py-2 rounded-lg border font-mono text-sm transition-all duration-200 ${
-                  selectedIndex === i
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border/50 text-muted-foreground hover:border-primary/40 hover:text-foreground"
-                }`}
-              >
-                {tool.name}
-              </button>
-            ))}
-          </div>
-
-          {/* Split panel */}
-          <div className="grid md:grid-cols-[1fr,auto,1fr] gap-4 max-w-4xl mx-auto items-center">
-            {/* Left: Agent Request */}
-            <div className="rounded-xl border border-border/50 bg-[#0f0f1a] overflow-hidden">
-              <div className="px-4 py-3 border-b border-white/5 flex items-center gap-2">
-                <Terminal className="size-3.5 text-primary" />
-                <span className="text-[11px] text-white/30 font-mono">
-                  Agent Request
-                </span>
-              </div>
-              <div className="p-5 min-h-[80px] flex items-center">
-                <AnimatePresence mode="wait">
-                  {selectedTool ? (
-                    <motion.pre
-                      key={selectedTool.name}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="text-[13px] font-mono leading-relaxed"
-                    >
-                      <span className="text-green-400">&gt; </span>
-                      <span className="text-blue-400">agent</span>
-                      <span className="text-[#e4e4ef]">.validate(</span>
-                      <span className="text-green-400">
-                        &quot;research-bot&quot;
-                      </span>
-                      <span className="text-[#e4e4ef]">, </span>
-                      <span className="text-green-400">
-                        &quot;{selectedTool.name}&quot;
-                      </span>
-                      <span className="text-[#e4e4ef]">)</span>
-                    </motion.pre>
-                  ) : (
-                    <span className="text-[13px] font-mono text-white/20">
-                      Select a tool above...
-                    </span>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
-
-            {/* Arrow */}
-            <div className="hidden md:flex items-center justify-center">
-              <motion.div
-                animate={
-                  showResult && selectedTool
-                    ? { opacity: 1, x: [0, 6, 0] }
-                    : { opacity: 0.3 }
-                }
-                transition={{ duration: 0.6, repeat: showResult ? 0 : 0 }}
-              >
-                <ArrowRight
-                  className={`size-5 ${
-                    showResult && selectedTool
-                      ? selectedTool.allowed
-                        ? "text-green-400"
-                        : "text-red-400"
-                      : "text-muted-foreground/40"
-                  }`}
-                />
-              </motion.div>
-            </div>
-
-            {/* Right: Response */}
-            <div className="rounded-xl border border-border/50 bg-[#0f0f1a] overflow-hidden">
-              <div className="px-4 py-3 border-b border-white/5 flex items-center gap-2">
-                <Shield className="size-3.5 text-primary" />
-                <span className="text-[11px] text-white/30 font-mono">
-                  AgentsID Response
-                </span>
-              </div>
-              <div className="p-5 min-h-[80px] flex items-center">
-                <AnimatePresence mode="wait">
-                  {showResult && selectedTool ? (
-                    <motion.div
-                      key={selectedTool.name + "-result"}
-                      initial={{ opacity: 0, x: 10 }}
-                      animate={
-                        selectedTool.allowed
-                          ? { opacity: 1, x: 0 }
-                          : { opacity: 1, x: [10, -4, 4, -2, 0] }
-                      }
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="space-y-2"
-                    >
-                      <span
-                        className={`inline-block px-2.5 py-0.5 rounded text-xs font-semibold border ${
-                          selectedTool.allowed
-                            ? "bg-green-500/20 text-green-400 border-green-500/30"
-                            : "bg-red-500/20 text-red-400 border-red-500/30"
-                        }`}
-                      >
-                        {selectedTool.allowed ? "ALLOWED" : "BLOCKED"}
-                      </span>
-                      <pre className="text-[12px] font-mono text-white/60 leading-relaxed">
-                        {selectedTool.result}
-                      </pre>
-                    </motion.div>
-                  ) : (
-                    <span className="text-[13px] font-mono text-white/20">
-                      Awaiting request...
-                    </span>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
-          </div>
-
-          {/* Permission rules */}
-          <div className="flex flex-wrap justify-center gap-2 mt-8">
-            {permissionRules.map((rule) => (
-              <span
-                key={rule.pattern}
-                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono border ${
-                  rule.type === "allow"
-                    ? "bg-green-500/10 text-green-400 border-green-500/20"
-                    : rule.type === "deny"
-                      ? "bg-red-500/10 text-red-400 border-red-500/20"
-                      : "bg-white/5 text-white/30 border-white/10"
-                }`}
-              >
-                {rule.pattern}
-                <span className="text-[10px] opacity-60">
-                  {rule.type === "allow"
-                    ? "allow"
-                    : rule.type === "deny"
-                      ? "deny"
-                      : "deny (default)"}
-                </span>
-              </span>
-            ))}
-          </div>
-        </FadeInSection>
-      </div>
-    </section>
+    <div
+      className="flex items-center gap-4 p-3 rounded font-mono text-[12.5px]"
+      style={{ background: palette.bg }}
+    >
+      <span style={{ color: palette.color }}>{palette.label}</span>
+      <span>{tool}</span>
+      <span className="ml-auto text-muted-foreground">{note}</span>
+    </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Landing Page
+// Landing
 // ---------------------------------------------------------------------------
 
 const Landing = () => {
-  const [typedChars, setTypedChars] = useState(0);
-  const terminalText = "npx agentsid init \"My App\"";
-  const heroRef = useRef(null);
-  const heroInView = useInView(heroRef, { once: true });
-
-  useEffect(() => {
-    if (!heroInView) return;
-    const timer = setTimeout(() => {
-      const interval = setInterval(() => {
-        setTypedChars((prev) => {
-          if (prev >= terminalText.length) {
-            clearInterval(interval);
-            return prev;
-          }
-          return prev + 1;
-        });
-      }, 50);
-      return () => clearInterval(interval);
-    }, 800);
-    return () => clearTimeout(timer);
-  }, [heroInView]);
-
   return (
-    <div className="overflow-hidden">
-      {/* ── Hero ── */}
-      <section ref={heroRef} className="relative py-24 lg:py-36 overflow-hidden">
-        {/* Particle background */}
-        <Particles
-          className="absolute inset-0"
-          quantity={60}
-          color="#f59e0b"
-          size={0.6}
-          staticity={40}
-          ease={40}
-        />
+    <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
+      <AmbientGlow />
 
-        {/* Gradient orbs */}
-        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-amber-500/5 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 -right-32 w-80 h-80 bg-emerald-900/5 rounded-full blur-[100px]" />
+      <div className="relative z-10">
+        {/* HERO */}
+        <section className="mx-auto max-w-[1320px] px-6 md:px-10 pt-16 md:pt-24 pb-16 md:pb-20 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-12 lg:gap-16 items-center">
+          <FadeInSection>
+            <div className="flex items-center gap-3 mb-8">
+              <div className="flex items-center gap-2 rounded-full px-3 py-1.5 bg-card border border-border">
+                <span
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{
+                    background: "#f59e0b",
+                    boxShadow: "0 0 8px #f59e0b",
+                  }}
+                />
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                  New · Paper 5 · Unicode smuggling
+                </span>
+              </div>
+            </div>
 
-        <div className="container mx-auto px-4 lg:px-8 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={heroInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm px-4 py-1.5 text-sm font-medium text-primary mb-8"
+            <h1
+              className="font-extrabold tracking-[-0.04em] leading-[0.92]"
+              style={{ fontSize: "clamp(3rem, 7.8vw, 7rem)" }}
             >
-              <Shield className="size-4" />
-              Identity & Auth for AI Agents
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            </motion.div>
-
-            {/* Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={heroInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="text-5xl lg:text-7xl font-bold tracking-tight text-foreground leading-[1.05] mb-6"
-            >
-              Your agents need
+              We scan every
               <br />
-              <span className="bg-gradient-to-r from-primary via-amber-400 to-amber-300 bg-clip-text text-transparent">
-                real identity
-              </span>
-            </motion.h1>
+              MCP tool{" "}
+              <span className="font-light tracking-[-0.035em] text-muted-foreground">
+                in the world
+              </span>{" "}
+              —
+              <br />
+              and catch the ones
+              <br />
+              <span style={{ color: "#f59e0b" }}>telling agents to lie.</span>
+            </h1>
 
-            {/* Subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={heroInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.25 }}
-              className="text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
-            >
-              Scoped permissions, delegation chains, and tamper-evident audit
-              trails that prove what happened. Every tool call validated. Every
-              action logged.
-            </motion.p>
-
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={heroInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="flex flex-wrap justify-center gap-4 mb-14"
-            >
-              <Button
-                asChild
-                size="lg"
-                className="text-base px-8 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-shadow"
+            <p className="mt-8 md:mt-10 text-lg md:text-xl max-w-xl text-muted-foreground">
+              <span
+                className="text-foreground"
+                style={{
+                  background:
+                    "linear-gradient(180deg, transparent 55%, rgba(245,158,11,0.3) 55%)",
+                }}
               >
-                <a href="/dashboard">
-                  Start Free <ArrowRight className="ml-2 size-4" />
-                </a>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="text-base px-8 backdrop-blur-sm"
-              >
-                <a href="/docs">Read the Docs</a>
-              </Button>
-            </motion.div>
-
-            {/* Terminal preview */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={heroInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.55 }}
-              className="max-w-md mx-auto"
-            >
-              <div className="rounded-lg border border-border/50 bg-[#0f0f1a]/80 backdrop-blur-sm p-4">
-                <div className="flex items-center gap-2 text-sm font-mono">
-                  <Terminal className="size-4 text-primary" />
-                  <span className="text-green-400">$</span>
-                  <span className="text-[#e4e4ef]">
-                    {terminalText.slice(0, typedChars)}
-                  </span>
-                  <span className="inline-block w-2 h-4 bg-primary/70 animate-pulse" />
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Proof points ── */}
-      <section className="py-10 border-t border-border/30">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="flex flex-wrap justify-center gap-10 lg:gap-16">
-            {proofPoints.map((point) => (
-              <div key={point.label} className="text-center">
-                <p className="text-2xl font-bold text-foreground">{point.value}</p>
-                <p className="text-xs uppercase tracking-widest text-muted-foreground/60">{point.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Stats ── */}
-      <section className="py-16 lg:py-20 border-t border-border/30">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-3xl mx-auto">
-            {stats.map((stat) => (
-              <AnimatedStat
-                key={stat.label}
-                value={stat.value}
-                label={stat.label}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Code Example ── */}
-      <section className="py-16 lg:py-24 border-t border-border/30">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <FadeInSection>
-              <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-foreground mb-4">
-                Three lines to protect any agent
-              </h2>
-              <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                Install the SDK, set your keys, call{" "}
-                <code className="text-sm bg-primary/10 text-primary px-2 py-0.5 rounded font-mono">
-                  validate()
-                </code>{" "}
-                before every tool execution. AgentsID handles permissions, rate
-                limits, approvals, and audit logging.
-              </p>
-              <div className="flex gap-3">
-                <Button asChild variant="outline" size="sm">
-                  <a href="/guides#quick-start">
-                    Quick Start Guide <ArrowRight className="ml-1.5 size-3" />
-                  </a>
-                </Button>
-                <Button asChild variant="ghost" size="sm">
-                  <a
-                    href="https://github.com/AgentsID-dev/agentsid"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    View on GitHub
-                  </a>
-                </Button>
-              </div>
-            </FadeInSection>
-            <FadeInSection delay={0.15}>
-              <CodeBlock />
-            </FadeInSection>
-          </div>
-        </div>
-      </section>
-
-      {/* ── How It Works ── */}
-      <section className="py-16 lg:py-24 border-t border-border/30 relative overflow-hidden">
-        <AnimatedGridPattern
-          numSquares={30}
-          maxOpacity={0.08}
-          duration={3}
-          repeatDelay={1}
-          className="fill-primary/20 stroke-primary/10 [mask-image:radial-gradient(500px_circle_at_center,white,transparent)]"
-        />
-        <div className="container mx-auto px-4 lg:px-8 relative z-10">
-          <FadeInSection>
-            <div className="text-center mb-14">
-              <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-foreground mb-4">
-                Up and running in 5 minutes
-              </h2>
-              <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-                Three steps from zero to fully protected.
-              </p>
-            </div>
-          </FadeInSection>
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {howItWorks.map((step, i) => (
-              <FadeInSection key={step.step} delay={i * 0.12}>
-                <div className="relative rounded-xl border border-border/50 bg-card/80 backdrop-blur-sm p-6 text-center">
-                  <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-primary to-amber-600 text-white font-bold text-sm mb-4">
-                    {step.step}
-                  </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2">
-                    {step.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm mb-4">
-                    {step.desc}
-                  </p>
-                  <code className="text-xs font-mono text-primary bg-primary/5 px-3 py-1.5 rounded-md border border-primary/10">
-                    {step.code}
-                  </code>
-                </div>
-              </FadeInSection>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Interactive Demo ── */}
-      <InteractiveDemo />
-
-      {/* ── Features Grid ── */}
-      <section className="py-16 lg:py-24 border-t border-border/30">
-        <div className="container mx-auto px-4 lg:px-8">
-          <FadeInSection>
-            <div className="text-center mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-foreground mb-4">
-                Everything agents need. Nothing they don't.
-              </h2>
-              <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                Built from scratch for the AI agent era. Not adapted from human
-                auth — designed for machines.
-              </p>
-            </div>
-          </FadeInSection>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, i) => (
-              <FeatureCard key={feature.title} feature={feature} index={i} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ── */}
-      <section className="py-20 lg:py-28 border-t border-border/30 relative overflow-hidden">
-        <Particles
-          className="absolute inset-0"
-          quantity={40}
-          color="#f59e0b"
-          size={0.5}
-          staticity={60}
-          ease={60}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.03] to-transparent" />
-        <div className="container mx-auto px-4 lg:px-8 text-center relative z-10">
-          <FadeInSection>
-            <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-foreground mb-4">
-              Ready to secure your agents?
-            </h2>
-            <p className="text-muted-foreground text-lg mb-10 max-w-xl mx-auto">
-              Free tier includes 10,000 events/month and 25 agents. No credit card
-              required.
+                {STATS.scanned} MCP servers scanned.
+              </span>{" "}
+              {STATS.findings} findings. 460 with deceptive language. 145
+              CRITICAL with invisible Unicode. AgentsID gives every tool a
+              letter grade and every agent a permission boundary.
             </p>
-            <div className="flex justify-center gap-4">
-              <Button
-                asChild
-                size="lg"
-                className="text-base px-8 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-shadow"
-              >
-                <a href="/dashboard">
-                  Get Started Free <ArrowRight className="ml-2 size-4" />
+
+            <div className="mt-8 md:mt-10 flex flex-wrap gap-3">
+              <Button asChild size="lg" className="text-base px-6">
+                <a href="#install">
+                  Install on Claude Code{" "}
+                  <ArrowRight className="size-4 ml-1" />
                 </a>
               </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="text-base px-8"
-              >
-                <a href="/guides">View Tutorials</a>
+              <Button asChild variant="outline" size="lg" className="text-base px-6">
+                <Link to="/registry">Browse the registry →</Link>
               </Button>
             </div>
+
+            <div className="mt-10 md:mt-12 grid grid-cols-2 md:grid-cols-4 gap-0 border-t border-b border-border">
+              <div className="py-5 border-r border-border pr-5">
+                <div className="font-extrabold text-2xl md:text-3xl tabular-nums">{STATS.scanned}</div>
+                <div className="font-mono text-[10px] uppercase tracking-[0.2em] mt-1 text-muted-foreground">
+                  servers scanned
+                </div>
+              </div>
+              <div className="py-5 md:border-r border-border pl-5 md:pr-5">
+                <div
+                  className="font-extrabold text-2xl md:text-3xl tabular-nums"
+                  style={{ color: GRADE_COLORS.F }}
+                >
+                  {STATS.gradeF}
+                </div>
+                <div className="font-mono text-[10px] uppercase tracking-[0.2em] mt-1 text-muted-foreground">
+                  graded F
+                </div>
+              </div>
+              <div className="py-5 border-t md:border-t-0 border-r border-border pr-5">
+                <div className="font-extrabold text-2xl md:text-3xl tabular-nums">
+                  {STATS.papers} papers
+                </div>
+                <div className="font-mono text-[10px] uppercase tracking-[0.2em] mt-1 text-muted-foreground">
+                  open source
+                </div>
+              </div>
+              <div className="py-5 border-t md:border-t-0 border-border pl-5">
+                <div className="font-extrabold text-2xl md:text-3xl tabular-nums">0</div>
+                <div className="font-mono text-[10px] uppercase tracking-[0.2em] mt-1 text-muted-foreground">
+                  config to install
+                </div>
+              </div>
+            </div>
           </FadeInSection>
-        </div>
-      </section>
+
+          <FadeInSection delay={0.2} className="flex justify-center items-center">
+            <LiveDenyCard />
+          </FadeInSection>
+        </section>
+
+        {/* STATS STRIP — real numbers only, NO fabricated citations */}
+        <section className="border-y border-border bg-card">
+          <div className="mx-auto max-w-[1320px] px-6 md:px-10 py-6 flex items-center gap-6 md:gap-10 flex-wrap font-mono text-[11px] uppercase tracking-[0.15em] text-muted-foreground">
+            <div>
+              <span className="font-extrabold text-base text-foreground">
+                {STATS.scanned}
+              </span>{" "}
+              servers indexed
+            </div>
+            <span className="text-muted-foreground/50">·</span>
+            <div>
+              <span className="font-extrabold text-base text-foreground">
+                {STATS.findings}
+              </span>{" "}
+              findings
+            </div>
+            <span className="text-muted-foreground/50">·</span>
+            <div>
+              <span className="font-extrabold text-base text-foreground">
+                {STATS.papers}
+              </span>{" "}
+              papers open source
+            </div>
+            <span className="text-muted-foreground/50">·</span>
+            <div>
+              <span
+                className="font-extrabold text-base"
+                style={{ color: GRADE_COLORS.F }}
+              >
+                {STATS.gradeF}
+              </span>{" "}
+              graded F
+            </div>
+          </div>
+        </section>
+
+        {/* PROBLEM */}
+        <section className="mx-auto max-w-[1320px] px-6 md:px-10 py-20 md:py-28 grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-start">
+          <FadeInSection>
+            <div className="font-mono text-[11px] uppercase tracking-[0.2em] mb-5 text-[#f59e0b]">
+              The problem
+            </div>
+            <h2
+              className="font-extrabold tracking-[-0.04em] leading-[0.92]"
+              style={{ fontSize: "clamp(2.4rem, 5.5vw, 5rem)" }}
+            >
+              Agents trust
+              <br />
+              <span className="font-light text-muted-foreground">
+                everything.
+              </span>
+            </h2>
+          </FadeInSection>
+          <FadeInSection delay={0.1} className="pt-2">
+            <p className="text-lg md:text-xl mb-6">
+              When an agent reads a tool description, it doesn't know which
+              words came from the user, which came from the system, and which
+              came from the tool author.
+            </p>
+            <p className="text-lg md:text-xl mb-6 text-muted-foreground">
+              Tool descriptions, user prompts, and system instructions all
+              arrive at the same trust level.{" "}
+              <strong className="text-foreground">
+                One word — "secretly", "skip", "MUST" — can flip an entire
+                agent's behavior.
+              </strong>
+            </p>
+            <p className="text-lg md:text-xl text-muted-foreground">
+              We read every tool description on npm and PyPI to find the ones
+              that do this. We keep your agents from calling them.
+            </p>
+          </FadeInSection>
+        </section>
+
+        {/* TWO LAYERS */}
+        <section className="mx-auto max-w-[1320px] px-6 md:px-10 py-20 md:py-28 border-t border-border">
+          <FadeInSection>
+            <div className="flex items-baseline justify-between flex-wrap gap-4 mb-12">
+              <h2
+                className="font-extrabold tracking-[-0.04em] leading-[0.92]"
+                style={{ fontSize: "clamp(2.4rem, 5.5vw, 5rem)" }}
+              >
+                Two layers. One trust boundary.
+              </h2>
+              <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                how agentsid works
+              </div>
+            </div>
+          </FadeInSection>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Layer 1: Scanner */}
+            <FadeInSection delay={0.1}>
+              <div className="p-8 md:p-10 rounded-lg bg-card border border-border h-full">
+                <div className="font-mono text-[11px] uppercase tracking-[0.2em] mb-3 text-[#f59e0b]">
+                  Layer 1 · Discovery
+                </div>
+                <div
+                  className="font-extrabold tracking-[-0.04em]"
+                  style={{ fontSize: "2.2rem", lineHeight: 0.95 }}
+                >
+                  Scanner
+                  <br />
+                  <span className="font-light text-muted-foreground">
+                    grades every tool.
+                  </span>
+                </div>
+                <p className="mt-6 text-muted-foreground">
+                  Open-source CLI. Scans tool source, descriptions, and
+                  behavior for prompt injection, hidden Unicode, deceptive
+                  language, and dangerous patterns. Outputs a single letter
+                  grade.
+                </p>
+                <div className="mt-8 space-y-3">
+                  <div className="flex items-center gap-4">
+                    <GradeStamp letter="A" size="md" />
+                    <span className="font-mono text-sm">
+                      @modelcontextprotocol/server-filesystem
+                    </span>
+                    <span className="ml-auto font-mono text-[11px] text-muted-foreground">
+                      0 findings
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <GradeStamp letter="C" size="md" />
+                    <span className="font-mono text-sm">
+                      @community/notion-mcp
+                    </span>
+                    <span className="ml-auto font-mono text-[11px] text-muted-foreground">
+                      2 medium
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <GradeStamp letter="F" size="md" />
+                    <span className="font-mono text-sm">
+                      @smart-thermostat-mcp/server
+                    </span>
+                    <span
+                      className="ml-auto font-mono text-[11px]"
+                      style={{ color: GRADE_COLORS.F }}
+                    >
+                      12 CRITICAL
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-border">
+                  <pre className="rounded-md bg-black border border-border p-4 font-mono text-[12.5px] leading-relaxed overflow-x-auto">
+                    <span className="text-foreground">
+                      $ npx{" "}
+                      <span style={{ color: "#7dd3fc" }}>
+                        @agentsid/scanner
+                      </span>{" "}
+                      audit{" "}
+                      <span style={{ color: "#f59e0b" }}>@notion/mcp</span>
+                    </span>
+                    {"\n"}
+                    <span className="text-muted-foreground">
+                      → Grade: C — Monitor
+                    </span>
+                    {"\n"}
+                    <span className="text-muted-foreground">
+                      → 2 findings (wording)
+                    </span>
+                    {"\n"}
+                    <span className="text-muted-foreground">
+                      → agentsid.dev/registry/notion-mcp
+                    </span>
+                  </pre>
+                </div>
+              </div>
+            </FadeInSection>
+
+            {/* Layer 2: Enforcement */}
+            <FadeInSection delay={0.18}>
+              <div
+                className="p-8 md:p-10 rounded-lg border h-full"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(245,158,11,0.08), transparent), var(--color-card)",
+                  borderColor: "#f59e0b",
+                }}
+              >
+                <div className="font-mono text-[11px] uppercase tracking-[0.2em] mb-3 text-[#f59e0b]">
+                  Layer 2 · Enforcement
+                </div>
+                <div
+                  className="font-extrabold tracking-[-0.04em]"
+                  style={{ fontSize: "2.2rem", lineHeight: 0.95 }}
+                >
+                  Server
+                  <br />
+                  <span className="font-light text-muted-foreground">
+                    blocks at the wire.
+                  </span>
+                </div>
+                <p className="mt-6 text-muted-foreground">
+                  MCP-native middleware. Every tool call passes through a
+                  permission engine. Denies block before execution. Every
+                  event is hash-chained into an audit log. Works with Claude
+                  Code, Cursor, and any MCP client today.
+                </p>
+
+                <div className="mt-8 space-y-3">
+                  <EventRow kind="allow" tool="Read(src/routes/notes.js)" note="0.4s" />
+                  <EventRow kind="deny" tool="Bash(npm test)" note="rule #104" />
+                  <EventRow kind="derive" tool="code-reviewer@claude" note="subagent" />
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-border">
+                  <pre className="rounded-md bg-black border border-border p-4 font-mono text-[12.5px] leading-relaxed overflow-x-auto">
+                    <span className="text-foreground">
+                      $ npx{" "}
+                      <span style={{ color: "#7dd3fc" }}>
+                        @agentsid/setup
+                      </span>
+                    </span>
+                    {"\n"}
+                    <span className="text-muted-foreground">
+                      → detected: Claude Code
+                    </span>
+                    {"\n"}
+                    <span className="text-muted-foreground">
+                      → installing hook…
+                    </span>
+                    {"\n"}
+                    <span className="text-muted-foreground">
+                      → ✓ enforcing in your next session
+                    </span>
+                  </pre>
+                </div>
+              </div>
+            </FadeInSection>
+          </div>
+        </section>
+
+        {/* HOW IT WORKS — 3 STEPS */}
+        <section id="install" className="mx-auto max-w-[1320px] px-6 md:px-10 py-20 md:py-28 border-t border-border">
+          <FadeInSection>
+            <div className="font-mono text-[11px] uppercase tracking-[0.2em] mb-3 text-[#f59e0b]">
+              How it works
+            </div>
+            <h2
+              className="font-extrabold tracking-[-0.04em] leading-[0.92] mb-12"
+              style={{ fontSize: "clamp(2.4rem, 5.5vw, 5rem)" }}
+            >
+              One command.
+              <br />
+              Under a minute.
+            </h2>
+          </FadeInSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <FadeInSection delay={0.05}>
+              <div className="p-8 rounded-lg bg-card border border-border h-full">
+                <div
+                  className="font-extrabold tracking-[-0.04em] text-5xl mb-5"
+                  style={{ color: "#f59e0b" }}
+                >
+                  01
+                </div>
+                <div className="font-extrabold tracking-tight text-2xl mb-3">
+                  Install the hook.
+                </div>
+                <p className="mb-5 text-muted-foreground">
+                  One npx command. Detects your agent runtime (Claude Code,
+                  Cursor, Codex, and more), wires up the pre-tool hook, writes
+                  config to the right place. No restart.
+                </p>
+                <pre className="rounded-md bg-black border border-border p-4 font-mono text-[12.5px]">
+                  npx{" "}
+                  <span style={{ color: "#7dd3fc" }}>@agentsid/setup</span>
+                  @latest
+                </pre>
+              </div>
+            </FadeInSection>
+
+            <FadeInSection delay={0.12}>
+              <div className="p-8 rounded-lg bg-card border border-border h-full">
+                <div
+                  className="font-extrabold tracking-[-0.04em] text-5xl mb-5"
+                  style={{ color: "#f59e0b" }}
+                >
+                  02
+                </div>
+                <div className="font-extrabold tracking-tight text-2xl mb-3">
+                  Set your rules.
+                </div>
+                <p className="mb-5 text-muted-foreground">
+                  A dashboard for humans and an MCP surface for agents
+                  themselves. Allow/deny tools, set per-subagent scopes,
+                  approve elevations. Presets for Developer, Writer,
+                  Data-Science.
+                </p>
+                <div className="p-4 rounded bg-background">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="font-mono text-xs text-muted-foreground">
+                      preset
+                    </span>
+                    <span className="font-extrabold tracking-tight text-lg">
+                      Developer
+                    </span>
+                  </div>
+                  <div className="font-mono text-xs space-y-0.5">
+                    <div style={{ color: GRADE_COLORS.A }}>
+                      ✓ Read Glob Grep
+                    </div>
+                    <div style={{ color: GRADE_COLORS.A }}>
+                      ✓ Write (scoped)
+                    </div>
+                    <div style={{ color: GRADE_COLORS.F }}>⛔ Bash</div>
+                    <div style={{ color: GRADE_COLORS.F }}>⛔ WebFetch</div>
+                  </div>
+                </div>
+              </div>
+            </FadeInSection>
+
+            <FadeInSection delay={0.2}>
+              <div className="p-8 rounded-lg bg-card border border-border h-full">
+                <div
+                  className="font-extrabold tracking-[-0.04em] text-5xl mb-5"
+                  style={{ color: "#f59e0b" }}
+                >
+                  03
+                </div>
+                <div className="font-extrabold tracking-tight text-2xl mb-3">
+                  See every decision.
+                </div>
+                <p className="mb-5 text-muted-foreground">
+                  Every allow, deny, derive, and elevation is hash-chained
+                  into an append-only audit log. Replace a row and the chain
+                  breaks. Verify with one CLI command.
+                </p>
+                <div className="font-mono text-xs space-y-1 text-muted-foreground">
+                  <div>
+                    #002481 ←{" "}
+                    <span style={{ color: "#f59e0b" }}>4a7f2e9b</span>
+                  </div>
+                  <div>#002480 ← bf3e7d12</div>
+                  <div>#002479 ← a1c49a87</div>
+                  <div className="mt-2" style={{ color: GRADE_COLORS.A }}>
+                    ✓ chain verified to genesis
+                  </div>
+                </div>
+              </div>
+            </FadeInSection>
+          </div>
+        </section>
+
+        {/* DUAL AUDIENCE */}
+        <section className="border-t border-b border-border">
+          <div className="mx-auto max-w-[1320px] grid grid-cols-1 md:grid-cols-2 gap-0">
+            <FadeInSection className="p-10 md:p-16 border-b md:border-b-0 md:border-r border-border">
+              <div className="font-mono text-[11px] uppercase tracking-[0.2em] mb-4 text-[#f59e0b]">
+                For agent builders
+              </div>
+              <h3 className="font-extrabold tracking-[-0.04em] text-3xl md:text-4xl mb-6">
+                Block bad tools
+                <br />
+                before they run.
+              </h3>
+              <ul className="space-y-4 text-base md:text-lg">
+                <li className="flex gap-3">
+                  <span style={{ color: "#f59e0b" }}>→</span>
+                  One-line install on Claude Code, Cursor, Codex
+                </li>
+                <li className="flex gap-3">
+                  <span style={{ color: "#f59e0b" }}>→</span>
+                  Grade-aware blocking (never auto-connect F tools)
+                </li>
+                <li className="flex gap-3">
+                  <span style={{ color: "#f59e0b" }}>→</span>
+                  Per-subagent permission boundaries
+                </li>
+                <li className="flex gap-3">
+                  <span style={{ color: "#f59e0b" }}>→</span>
+                  Hash-chained audit for every action
+                </li>
+                <li className="flex gap-3">
+                  <span style={{ color: "#f59e0b" }}>→</span>
+                  Free forever for &lt;10k validations/month
+                </li>
+              </ul>
+              <Button asChild size="lg" className="mt-8">
+                <a href="#install">Install now →</a>
+              </Button>
+            </FadeInSection>
+
+            <FadeInSection
+              delay={0.1}
+              className="p-10 md:p-16"
+              {...{
+                style: {
+                  background:
+                    "linear-gradient(180deg, rgba(245,158,11,0.04), transparent)",
+                },
+              }}
+            >
+              <div className="font-mono text-[11px] uppercase tracking-[0.2em] mb-4 text-[#f59e0b]">
+                For tool authors
+              </div>
+              <h3 className="font-extrabold tracking-[-0.04em] text-3xl md:text-4xl mb-6">
+                Show the world
+                <br />
+                your tool is honest.
+              </h3>
+              <ul className="space-y-4 text-base md:text-lg">
+                <li className="flex gap-3">
+                  <span style={{ color: "#f59e0b" }}>→</span>
+                  Free scan — every MCP server on npm/PyPI
+                </li>
+                <li className="flex gap-3">
+                  <span style={{ color: "#f59e0b" }}>→</span>
+                  Embeddable grade badge for your README
+                </li>
+                <li className="flex gap-3">
+                  <span style={{ color: "#f59e0b" }}>→</span>
+                  Claim your listing, see every finding
+                </li>
+                <li className="flex gap-3">
+                  <span style={{ color: "#f59e0b" }}>→</span>
+                  Actionable fix recommendations, not accusations
+                </li>
+                <li className="flex gap-3">
+                  <span style={{ color: "#f59e0b" }}>→</span>
+                  Re-scan on every release
+                </li>
+              </ul>
+              <Button asChild variant="outline" size="lg" className="mt-8">
+                <Link to="/claim">Claim your tool →</Link>
+              </Button>
+            </FadeInSection>
+          </div>
+        </section>
+
+        {/* CODE INTEGRATION */}
+        <section className="mx-auto max-w-[1320px] px-6 md:px-10 py-20 md:py-28">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-10 md:gap-14 items-center">
+            <FadeInSection>
+              <div className="font-mono text-[11px] uppercase tracking-[0.2em] mb-4 text-[#f59e0b]">
+                Developer experience
+              </div>
+              <h2 className="font-extrabold tracking-[-0.04em] text-4xl md:text-5xl mb-6">
+                One call per
+                <br />
+                tool decision.
+              </h2>
+              <p className="text-lg text-muted-foreground">
+                Our hook is 200 lines of bash. No SDK to learn, no language
+                runtime to match. If your agent can run a shell script before
+                a tool call, AgentsID works.
+              </p>
+              <p className="text-lg mt-4 text-muted-foreground">
+                For agents that don't: a REST API, MCP tool surface, or direct
+                validator call.
+              </p>
+            </FadeInSection>
+
+            <FadeInSection delay={0.1}>
+              <pre className="rounded-lg bg-black border border-border p-5 md:p-6 font-mono text-[13px] leading-relaxed overflow-x-auto">
+                <span className="text-muted-foreground">
+                  # Claude Code PreToolUse hook — installed automatically
+                </span>
+                {"\n"}
+                <span className="text-muted-foreground">
+                  # stdin: {"{"} tool_name, tool_input, agent_id?,
+                  agent_type? {"}"}
+                </span>
+                {"\n\n"}
+                <span style={{ color: "#e0a060" }}>RESPONSE</span>=$(curl -s
+                --max-time 2 \{"\n"} -X POST{" "}
+                <span style={{ color: "#f59e0b" }}>
+                  "${"{"}API_BASE{"}"}/api/v1/validate"
+                </span>{" "}
+                \{"\n"} -H{" "}
+                <span style={{ color: "#f59e0b" }}>
+                  "Authorization: Bearer ${"{"}PROJECT_KEY{"}"}"
+                </span>{" "}
+                \{"\n"} -d{" "}
+                <span style={{ color: "#f59e0b" }}>
+                  "{"{"} \"token\": \"${"{"}AGENT_TOKEN{"}"}\", \"tool\":
+                  \"${"{"}TOOL_NAME{"}"}\", \"params\": ${"{"}TOOL_INPUT{"}"}
+                  {"}"}"
+                </span>
+                ){"\n\n"}
+                <span style={{ color: "#e0a060" }}>DECISION</span>=$(echo{" "}
+                <span style={{ color: "#f59e0b" }}>"$RESPONSE"</span> | jq -r{" "}
+                <span style={{ color: "#f59e0b" }}>
+                  '.permission.allowed'
+                </span>
+                ){"\n\n"}
+                <span style={{ color: "#e0a060" }}>if</span> [{" "}
+                <span style={{ color: "#f59e0b" }}>"$DECISION"</span> ={" "}
+                <span style={{ color: "#f59e0b" }}>"false"</span> ];{" "}
+                <span style={{ color: "#e0a060" }}>then</span>
+                {"\n"} <span className="text-muted-foreground">
+                  echo {'\\{"hookSpecificOutput":{"permissionDecision":"deny"}\\}'}
+                </span>
+                {"\n"}
+                <span style={{ color: "#e0a060" }}>fi</span>
+              </pre>
+            </FadeInSection>
+          </div>
+        </section>
+
+        {/* RESEARCH PAPERS */}
+        <section className="border-t border-border bg-card">
+          <div className="mx-auto max-w-[1320px] px-6 md:px-10 py-16 md:py-20">
+            <FadeInSection>
+              <div className="flex items-baseline justify-between mb-10 flex-wrap gap-4">
+                <h2 className="font-extrabold tracking-[-0.04em] text-3xl md:text-4xl">
+                  Research we've published.
+                </h2>
+                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                  open source
+                </span>
+              </div>
+            </FadeInSection>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {RESEARCH.map((paper, i) => (
+                <FadeInSection key={paper.id} delay={i * 0.05}>
+                  <a
+                    href={`/research#${paper.id}`}
+                    className="block p-6 rounded-lg bg-background border border-border hover:border-[#f59e0b]/50 transition-colors flex items-start gap-5"
+                  >
+                    <span
+                      className="font-extrabold tracking-[-0.04em] text-4xl shrink-0"
+                      style={{ color: "#f59e0b" }}
+                    >
+                      {paper.id}
+                    </span>
+                    <div>
+                      <div className="font-extrabold text-lg mb-1">
+                        {paper.title}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        {paper.desc}
+                      </div>
+                      <div className="font-mono text-[10px] uppercase tracking-[0.2em] mt-2 text-[#f59e0b]">
+                        {paper.meta}
+                      </div>
+                    </div>
+                  </a>
+                </FadeInSection>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* HOW WE WORK + FAQ */}
+        <section className="mx-auto max-w-[1320px] px-6 md:px-10 py-20 md:py-28 border-t border-border grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-10 md:gap-14">
+          <FadeInSection>
+            <div className="font-mono text-[11px] uppercase tracking-[0.2em] mb-4 text-[#f59e0b]">
+              How we work
+            </div>
+            <h2 className="font-extrabold tracking-[-0.04em] text-4xl mb-6">
+              Built
+              <br />
+              in public.
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              All scanner code on GitHub. Every research paper open. Every
+              deny in your audit trail traces back to the rule commit that
+              authorized it.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-2 font-mono text-[11px] uppercase tracking-[0.2em]">
+              <span className="px-2.5 py-1 rounded bg-card border border-border text-muted-foreground">
+                scanner · MIT
+              </span>
+              <span className="px-2.5 py-1 rounded bg-card border border-border text-muted-foreground">
+                server · source-available
+              </span>
+              <span className="px-2.5 py-1 rounded bg-card border border-border text-muted-foreground">
+                research · open
+              </span>
+            </div>
+          </FadeInSection>
+
+          <FadeInSection delay={0.1}>
+            <div className="space-y-6">
+              {FAQ.map((item, i) => (
+                <div
+                  key={i}
+                  className={
+                    i < FAQ.length - 1 ? "border-b border-border pb-6" : ""
+                  }
+                >
+                  <div className="font-extrabold text-xl mb-2">{item.q}</div>
+                  <p className="text-muted-foreground">{item.a}</p>
+                </div>
+              ))}
+            </div>
+          </FadeInSection>
+        </section>
+
+        {/* FINAL CTA */}
+        <section
+          className="border-t border-border"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 80% at 50% 0%, rgba(245,158,11,0.12), transparent 70%)",
+          }}
+        >
+          <div className="mx-auto max-w-[1320px] px-6 md:px-10 py-24 md:py-32 text-center">
+            <FadeInSection>
+              <div className="font-mono text-[11px] uppercase tracking-[0.2em] mb-6 text-[#f59e0b]">
+                One command
+              </div>
+              <h2
+                className="font-extrabold tracking-[-0.04em] leading-[0.92]"
+                style={{ fontSize: "clamp(3rem, 7vw, 6rem)" }}
+              >
+                Stop your next agent
+                <br />
+                from calling an{" "}
+                <span style={{ color: GRADE_COLORS.F }}>F.</span>
+              </h2>
+              <div className="mt-10 md:mt-12 flex justify-center">
+                <InstallBlock />
+              </div>
+              <div className="mt-8 flex justify-center gap-3 flex-wrap">
+                <Button asChild size="lg">
+                  <a href="#install">
+                    Install on Claude Code{" "}
+                    <ArrowRight className="size-4 ml-1" />
+                  </a>
+                </Button>
+                <Button asChild variant="outline" size="lg">
+                  <Link to="/research">Read the papers</Link>
+                </Button>
+              </div>
+              <div className="mt-6 flex justify-center gap-2">
+                <GradeChip letter="A" />
+                <GradeChip letter="B" />
+                <GradeChip letter="C" />
+                <GradeChip letter="D" />
+                <GradeChip letter="F" />
+              </div>
+            </FadeInSection>
+          </div>
+        </section>
+      </div>
     </div>
   );
 };
