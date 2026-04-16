@@ -15,6 +15,7 @@ const Blog = lazy(() => import("@/pages/blog").then((m) => ({ default: m.Blog })
 const BlogPost = lazy(() => import("@/pages/blog-post").then((m) => ({ default: m.BlogPost })));
 const Spec = lazy(() => import("@/pages/spec").then((m) => ({ default: m.Spec })));
 const Research = lazy(() => import("@/pages/research").then((m) => ({ default: m.Research })));
+const Grade = lazy(() => import("@/pages/grade").then((m) => ({ default: m.Grade })));
 
 const RegistryV2 = lazy(() => import("@/pages/registry-v2").then((m) => ({ default: m.RegistryV2 })));
 const RegistryServerV2 = lazy(() => import("@/pages/registry-server-v2").then((m) => ({ default: m.RegistryServerV2 })));
@@ -50,6 +51,8 @@ function App() {
                 <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="/spec" element={<Spec />} />
                 <Route path="/research" element={<Research />} />
+                <Route path="/docs/grade" element={<Grade />} />
+                <Route path="/grade" element={<Grade />} />
                 <Route path="/hall-of-mcps" element={<RegistryV2 />} />
                 <Route path="/registry" element={<RegistryV2 />} />
                 <Route path="/registry/:slug" element={<RegistryServerV2 />} />
