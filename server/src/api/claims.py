@@ -16,7 +16,7 @@ from pathlib import Path
 from threading import Lock
 
 from fastapi import APIRouter, HTTPException, Request
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, Field
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
@@ -24,6 +24,10 @@ from src.services.notifications import notify_claim_submission
 
 router = APIRouter(prefix="/api/claims", tags=["claims"])
 limiter = Limiter(key_func=get_remote_address)
+
+# Simple email check — we avoid pydantic's EmailStr because it requires the
+# email-validator dependency, and this is a waitlist form (not auth).
+_EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 
 
 # Write lock so two concurrent requests can't corrupt the JSONL file.
@@ -35,7 +39,7 @@ _WAITLIST_PATH = _DATA_DIR / "claim-waitlist.jsonl"
 
 
 class WaitlistSubmission(BaseModel):
-    email: EmailStr
+    email: str = Field(..., min_length=3, max_length=320)
     github_handle: str = Field(..., min_length=1, max_length=64)
     package_slug: str = Field(..., min_length=1, max_length=200)
     notes: str | None = Field(default=None, max_length=1000)
@@ -94,6 +98,10 @@ async def submit_waitlist(request: Request, body: WaitlistSubmission) -> dict:
     Rate limit: 5 submissions per IP per hour. Prevents form spam without
     blocking legitimate maintainers who want to claim more than one tool.
     """
+    email = body.email.strip().lower()
+    if not _EMAIL_RE.fullmatch(email):
+        raise HTTPException(status_code=400, detail="Invalid email")
+
     handle = body.github_handle.lstrip("@")
     if not _GH_HANDLE_RE.fullmatch(handle):
         raise HTTPException(status_code=400, detail="Invalid GitHub handle")
@@ -104,7 +112,7 @@ async def submit_waitlist(request: Request, body: WaitlistSubmission) -> dict:
 
     entry = WaitlistEntry(
         submitted_at=datetime.now(timezone.utc).isoformat(),
-        email=str(body.email),
+        email=email,
         github_handle=handle,
         package_slug=slug,
         notes=(body.notes or "").strip() or None,
