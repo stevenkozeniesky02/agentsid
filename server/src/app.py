@@ -21,6 +21,7 @@ from src.api.approvals import router as approvals_router
 from src.api.audit import router as audit_router
 from src.api.badge import router as badge_router
 from src.api.claims import router as claims_router
+from src.api.digest import router as digest_router
 from src.api.permissions import router as permissions_router
 from src.api.projects import router as projects_router
 from src.api.validate import router as validate_router
@@ -90,6 +91,8 @@ app.include_router(webhooks_router, prefix="/api/v1")
 app.include_router(badge_router)
 # Claim waitlist — see task #11 for the real GitHub OAuth verification flow
 app.include_router(claims_router)
+# Digest subscribe
+app.include_router(digest_router)
 
 
 # L3: Request size limit — reject bodies over 1MB
@@ -240,6 +243,7 @@ SPA_ROUTES = {
     "/spec", "/hall-of-mcps", "/research",
     "/grade", "/docs/grade",  # grade system docs (proposal #1)
     "/claim",                 # maintainer claim waitlist
+    "/digest",                # MCP Security Digest subscribe
 }
 
 
