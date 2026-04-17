@@ -1,5 +1,5 @@
 import { type ReactNode, useState, useEffect } from "react";
-import { Book, ExternalLink, FileText, LayoutDashboard, Mail, Menu, Shield, Trophy, Zap } from "lucide-react";
+import { BadgeCheck, Book, Code2, FileText, GraduationCap, LayoutDashboard, Mail, Menu, Newspaper, ScrollText, Shield, Trophy } from "lucide-react";
 
 import {
   Accordion,
@@ -63,7 +63,7 @@ const Navbar = ({
   },
   menu = [
     {
-      title: "Product",
+      title: "Platform",
       url: "#",
       items: [
         {
@@ -74,18 +74,18 @@ const Navbar = ({
         },
         {
           title: "Guides",
-          description: "Setup tutorials for Claude, Cursor, Codex, and more",
+          description: "Setup for Claude, Cursor, Codex, and more",
           icon: <FileText className="size-5 shrink-0" />,
           url: "/guides",
         },
         {
           title: "Dashboard",
-          description: "Manage your agents, permissions, and audit logs",
+          description: "Manage agents, permissions, and audit logs",
           icon: <LayoutDashboard className="size-5 shrink-0" />,
           url: "/dashboard",
         },
         {
-          title: "Security",
+          title: "Security Model",
           description: "HMAC tokens, deny-first permissions, audit chains",
           icon: <Shield className="size-5 shrink-0" />,
           url: "/docs#security",
@@ -93,68 +93,65 @@ const Navbar = ({
       ],
     },
     {
-      title: "Resources",
+      title: "Registry",
       url: "#",
       items: [
         {
-          title: "MCP Registry",
+          title: "Browse Registry",
           description: "Security grades for 15,983 MCP servers",
           icon: <Trophy className="size-5 shrink-0" />,
           url: "/registry",
         },
         {
           title: "Grading Standard",
-          description: "How we compute the A/B/C/D/F grade — four signals, one letter",
-          icon: <Shield className="size-5 shrink-0" />,
+          description: "How we compute A/B/C/D/F — four signals, one letter",
+          icon: <GraduationCap className="size-5 shrink-0" />,
           url: "/grade",
         },
         {
-          title: "Quick Start",
-          description: "Get up and running in under 5 minutes",
-          icon: <Zap className="size-5 shrink-0" />,
-          url: "/guides#quick-start",
+          title: "Claim Your Server",
+          description: "For maintainers: claim and respond to findings",
+          icon: <BadgeCheck className="size-5 shrink-0" />,
+          url: "/claim",
         },
         {
-          title: "Research",
-          description: "5 published security papers with full methodology",
+          title: "Embed a Badge",
+          description: "Drop your grade into your README as an SVG",
+          icon: <Code2 className="size-5 shrink-0" />,
+          url: "/badges",
+        },
+      ],
+    },
+    {
+      title: "Research",
+      url: "#",
+      items: [
+        {
+          title: "Research Papers",
+          description: "5 published papers with full methodology",
           icon: <FileText className="size-5 shrink-0" />,
           url: "/research",
         },
         {
           title: "Security Digest",
-          description: "Weekly newsletter: worst-graded MCP servers + new findings",
+          description: "Weekly newsletter: worst-graded servers + new findings",
           icon: <Mail className="size-5 shrink-0" />,
           url: "/digest",
         },
         {
-          title: "GitHub",
-          description: "SDKs, CLI tools, and example integrations",
-          icon: <ExternalLink className="size-5 shrink-0" />,
-          url: "https://github.com/AgentsID-dev/agentsid",
-          external: true,
+          title: "Blog",
+          description: "Ongoing analysis and new findings",
+          icon: <Newspaper className="size-5 shrink-0" />,
+          url: "/blog",
         },
         {
-          title: "Terms of Service",
-          description: "Our terms and conditions",
-          icon: <FileText className="size-5 shrink-0" />,
-          url: "/terms",
-        },
-        {
-          title: "Privacy Policy",
-          description: "How we handle your data",
-          icon: <Shield className="size-5 shrink-0" />,
-          url: "/privacy",
+          title: "MCP Spec",
+          description: "Our proposed safety additions to the protocol",
+          icon: <ScrollText className="size-5 shrink-0" />,
+          url: "/spec",
         },
       ],
     },
-    { title: "Docs", url: "/docs" },
-    { title: "Guides", url: "/guides" },
-    { title: "Registry", url: "/registry" },
-    { title: "Grade", url: "/grade" },
-    { title: "Spec", url: "/spec" },
-    { title: "Research", url: "/research" },
-    { title: "Blog", url: "/blog" },
-    { title: "Digest", url: "/digest" },
   ],
   mobileExtraLinks = [
     { name: "Terms", url: "/terms" },
