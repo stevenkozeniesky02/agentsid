@@ -354,3 +354,56 @@ Not documented. Safe assumption: restart Codex CLI session (exit / relaunch) for
 - https://developers.openai.com/codex/config-reference
 - https://github.com/openai/codex (installation + CLI)
 - https://github.com/openai/codex/blob/main/docs/config.md (canonical reference)
+
+---
+
+## Appendix A — Cursor Hooks Partner Program: outreach leverage
+
+**Per Cap (2026-04-17):** the Cursor hooks-partners list is outreach leverage worth a formal appendix. This section is for Voice/DevRel to use when drafting the pitch.
+
+### The existing roster (Cursor blog, 2025-12-22)
+
+| Partner | Positioning | AgentsID overlap |
+|---|---|---|
+| **MintMCP** | "Scan responses for sensitive data before it reaches the AI model" — DLP layer, MCP-focused | Partial overlap on MCP governance; we cover identity + permissions + audit, they cover DLP |
+| **Oasis Security** | "Enforce least-privilege policies on AI agent actions" + "full audit trails across enterprise systems" | **Direct competitor** — closest positioning to AgentsID |
+| **Runlayer** | MCP governance | Partial overlap |
+| **Corridor** | Code security | Orthogonal |
+| **Semgrep** | Code security (SAST) | Orthogonal |
+| **Endor Labs** | Dependency security — "scan for malicious deps, prevent supply chain attacks like typosquatting" | Orthogonal, but adjacent to our scanner |
+| **Snyk** | Agent safety | Partial overlap (they focus on code; we focus on runtime) |
+| **1Password** | Secrets management | Orthogonal |
+
+**AgentsID is not on this list.** That is the opportunity.
+
+### Why AgentsID belongs on the list
+
+Cursor's hooks system is explicitly designed for the use cases we ship natively:
+
+- `beforeShellExecution` → our permission-engine's existing Bash gate
+- `beforeMCPExecution` → our cross-MCP audit trail (no listed partner covers this specifically — Oasis is closest)
+- `beforeReadFile` → our .env / secrets policy
+- `sessionStart` → our agent registration / token issuance
+
+Oasis is the one to watch — they are also "policy + audit" for agentic IDE use. Differentiation angle for outreach: **(1)** AgentsID is identity-first (agent tokens, on_behalf_of attribution, delegation), Oasis is policy-first; **(2)** AgentsID publishes the public MCP security registry (15,983 entries, grade scale A–F) — no listed partner ships that; **(3)** AgentsID ships the CLI + scanner + setup wizard as an integrated surface — not a platform SKU with annual contracts.
+
+### Proposed pitch (for Voice)
+
+Subject line options (pick one to test):
+- "AgentsID ships Cursor hooks support — adding to your partner roster?"
+- "Hooks integration live: AgentsID for Cursor"
+- "Re: hooks-partners — we'd like to be on the list"
+
+Core ask: inclusion in a future revision of `cursor.com/blog/hooks-partners` and (stretch) a Cursor Marketplace listing at `cursor.com/marketplace` for `@agentsid/guard`.
+
+Evidence to include:
+- Working `.cursor/hooks.json` generator in `@agentsid/setup` (v0.2+ post-Smith patch)
+- Link to public registry (`agentsid.dev/registry`) and scanner grades
+- Screenshots of live permission denials happening in Cursor with our hooks in-line
+- Brief differentiation vs Oasis (identity-first vs policy-first)
+
+Contact path: Cursor's DevRel / partnerships inbox (lookup needed — Voice to research). LinkedIn outreach to the hooks-partners blog byline author is a decent warm path.
+
+### Timing
+
+Do **not** pitch before Smith ships the `cursor.ts` / `codex.ts` patches and v0.2 of `@agentsid/setup` lands on npm. The pitch needs a working integration to point at — otherwise Cursor has nothing to link to, and we look like aspirational vaporware next to partners that already shipped.
