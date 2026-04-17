@@ -1482,7 +1482,7 @@ function AuditTrailSection() {
         {entries.map((e, i) => (
           <div
             key={i}
-            className={`flex items-center gap-3 px-4 py-2.5 bg-card rounded-lg border font-mono text-sm ${
+            className={`flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2.5 bg-card rounded-lg border font-mono text-sm ${
               e.allowed ? "border-l-4 border-l-green-500 border-border" : "border-l-4 border-l-red-500 border-border"
             }`}
           >
@@ -2931,7 +2931,7 @@ const Docs = () => {
       </aside>
 
       {/* Main content */}
-      <main ref={mainRef} className="lg:ml-64 flex-1 min-h-screen">
+      <main ref={mainRef} className="lg:ml-64 flex-1 min-w-0 min-h-screen">
         <div className="max-w-[860px] mx-auto px-4 sm:px-8 lg:px-12 py-10 pb-24">
           <HeroSection />
           <InstallationSection />
