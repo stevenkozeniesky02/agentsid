@@ -65,7 +65,10 @@ const DENY_ENV_FILE: PolicyRule = {
   toolPattern: "file.read[.env]",
   action: "deny",
   priority: 60,
-  conditions: { path_pattern: ".env" },
+  // Cover every common .env variant: `.env` itself plus `.env.local`,
+  // `.env.production`, `.env.staging`, `.env.test`, etc. Path-pattern is
+  // glob-matched against params.file_path on the server.
+  conditions: { path_pattern: [".env", ".env.*"] },
 };
 
 const DENY_PEM_FILE: PolicyRule = {

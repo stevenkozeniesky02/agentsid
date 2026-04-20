@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.5] — 2026-04-20
+
+### Fixed
+- **Developer and security-team presets now cover every `.env*` variant.** The deny rule for `file.read[.env]` previously shipped with `conditions: { path_pattern: ".env" }` — an exact match. Reading `.env.local`, `.env.production`, `.env.staging`, `.env.test`, or any other `.env.*` variant fell through to the `*` allow fallback, even though those files typically hold the most sensitive secrets. The rule now uses `conditions: { path_pattern: [".env", ".env.*"] }` which is glob-matched server-side against the file_path.
+- No client-side behaviour change required — the condition loop in `server/src/services/permission.py::_matches_conditions` already handles list-of-patterns in its `path_pattern` special case (shipped 2026-04-20).
+
 ## [0.1.4] — 2026-04-20
 
 ### Changed
