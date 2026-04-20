@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.4] — 2026-04-20
+
+### Changed
+- Cursor integration promoted from "in testing" to stable. Live-verified in 0.1.3 end-to-end against `api.agentsid.dev` with real Cursor 1.7+ hooks: `beforeShellExecution` / `beforeMCPExecution` / `beforeReadFile` all fire with correct protocol, deny reasons surface in Cursor's UI, and `agent_message` reaches the LLM. README and platform selector in the wizard both updated — the "Cursor (in testing)" label is gone.
+
 ## [0.1.3] — 2026-04-20
 
 ### Fixed

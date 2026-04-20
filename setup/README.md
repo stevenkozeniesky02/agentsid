@@ -34,7 +34,7 @@ Once installed, every tool call from your agent hits `api.agentsid.dev/api/v1/va
 | Platform | Status |
 |---|---|
 | Claude Code | ✅ Stable |
-| Cursor | 🧪 In testing |
+| Cursor | ✅ Stable |
 | Codex CLI | 🧪 In testing |
 | Gemini CLI | 🧪 In testing |
 | Local model | 🧪 In testing |
