@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.6] — 2026-04-20
+
+### Added
+- **Block SSH private key reads.** New `DENY_SSH_KEY` rule (`file.read[ssh_key]`) in both the Developer and Security-Team presets, gated on the canonical private-key filenames (`id_rsa`, `id_ed25519`, `id_ecdsa`, `id_dsa`). Public keys (`id_rsa.pub` etc.) still fall through to normal reads. Classifier already emits the matching `file.read[ssh_key]` tag (shipped in the 0.1.3 server deploy), so no server change needed.
+- **Block PFX / P12 cert bundle reads.** New `DENY_PFX_FILE` rule (`file.read[*.pfx]`) added alongside the existing `.pem` / `.key` denies. PFX/P12 files usually contain a private key alongside the cert chain, so belong in the same sensitivity class.
+- New wizard toggle `credentials.ssh` — defaults ON — lets users opt out of the SSH-key block if they really need agents to read private keys (don't).
+
+### Changed
+- `credentials.pem` toggle label and description now reflect the broader PFX/P12 coverage.
+
 ## [0.1.5] — 2026-04-20
 
 ### Fixed

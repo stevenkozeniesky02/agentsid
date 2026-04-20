@@ -85,6 +85,25 @@ const DENY_KEY_FILE: PolicyRule = {
   conditions: { path_pattern: "*.key" },
 };
 
+const DENY_PFX_FILE: PolicyRule = {
+  toolPattern: "file.read[*.pfx]",
+  action: "deny",
+  priority: 60,
+  // Windows-style cert bundles. Usually contain a private key alongside the
+  // cert chain, so belong in the same sensitivity class as .pem/.key.
+  conditions: { path_pattern: ["*.pfx", "*.p12"] },
+};
+
+const DENY_SSH_KEY: PolicyRule = {
+  toolPattern: "file.read[ssh_key]",
+  action: "deny",
+  priority: 60,
+  // Classifier emits `file.read[ssh_key]` for the canonical SSH private-key
+  // filenames. Public keys (`id_rsa.pub` etc.) aren't classified, so they
+  // fall through to the existing allow rules.
+  conditions: { path_pattern: ["id_rsa", "id_ed25519", "id_ecdsa", "id_dsa"] },
+};
+
 // Allow rules with approval or unrestricted
 const ALLOW_FILE_WRITE_APPROVAL: PolicyRule = {
   toolPattern: "file.write",
@@ -184,9 +203,16 @@ const categories: readonly PolicyCategory[] = [
       {
         id: "credentials.pem",
         label: "Block certificate access",
-        description: "Prevents agents from reading .pem and .key files",
+        description: "Prevents agents from reading .pem, .key, .pfx, and .p12 files",
         defaultOn: true,
-        rules: [DENY_PEM_FILE, DENY_KEY_FILE],
+        rules: [DENY_PEM_FILE, DENY_KEY_FILE, DENY_PFX_FILE],
+      },
+      {
+        id: "credentials.ssh",
+        label: "Block SSH private key access",
+        description: "Prevents agents from reading id_rsa / id_ed25519 / id_ecdsa / id_dsa",
+        defaultOn: true,
+        rules: [DENY_SSH_KEY],
       },
     ],
   },
@@ -284,6 +310,8 @@ export const securityTeamPreset: PolicyPreset = {
     DENY_ENV_FILE,
     DENY_PEM_FILE,
     DENY_KEY_FILE,
+    DENY_PFX_FILE,
+    DENY_SSH_KEY,
     ALLOW_FILE_WRITE_APPROVAL,
     ALLOW_SHELL_WRITE_APPROVAL,
     ALLOW_SHELL_READ,
