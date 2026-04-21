@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.2] — 2026-04-20
+
+### Fixed
+- **Codex's guard MCP no longer times out on first run.** The 10s `startup_timeout_sec` we were writing into `config.toml` was Codex's own default, but it's too tight for a cold `npx -y @agentsid/guard` that has to fetch the package and its `@modelcontextprotocol/sdk` dependency (~2MB combined). First launch after `@agentsid/guard@0.1.1` landed on npm was hitting the 10s wall and failing with *"MCP client for agentsid timed out after 10 seconds"*. Subsequent launches hit the npx cache and are instant.
+- Bumped to 30s — safe headroom for fresh-install downloads while still fast enough that a genuinely hung server shows up as a failure in a reasonable time.
+
+### Notes
+- No changes to the guard package itself; this is purely a Codex-side config adjustment.
+- The `agentsid` MCP should now come up green on Codex after the wizard completes. If it still shows the timeout warning after 0.2.2, either the user's network is slow enough to exceed 30s on first fetch (edge case — they can bump further in `~/.codex/config.toml`) or there's a real bug in the guard.
+
 ## [0.2.1] — 2026-04-20
 
 ### Fixed

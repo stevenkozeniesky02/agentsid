@@ -35,7 +35,11 @@ import type {
 const HOOK_DIR = path.join(os.homedir(), ".agentsid", "hooks");
 const PRE_TOOL_HOOK = path.join(HOOK_DIR, "pre-tool.sh");
 const POST_TOOL_HOOK = path.join(HOOK_DIR, "post-tool.sh");
-const STARTUP_TIMEOUT_SEC = 10;
+// 30s lets a cold `npx -y @agentsid/guard` download the package +
+// @modelcontextprotocol/sdk (~2MB) on first run. Subsequent spawns hit
+// the npx cache and start in <1s. 10s was Codex's default and too tight
+// for a fresh install.
+const STARTUP_TIMEOUT_SEC = 30;
 const TOOL_TIMEOUT_SEC = 60;
 const HOOK_TIMEOUT_SEC = 3;
 

@@ -275,6 +275,10 @@ describe("codexIntegration", () => {
     expect(cfg.mcp_servers.agentsid.required).toBe(false);
     expect(cfg.mcp_servers.agentsid.enabled).toBe(true);
     expect(typeof cfg.mcp_servers.agentsid.startup_timeout_sec).toBe("number");
+    // 30s lets npx cold-install the guard on first run without Codex
+    // killing it at the 10s default. Regression here would re-break the
+    // cold-install path. See CHANGELOG 0.2.2.
+    expect(cfg.mcp_servers.agentsid.startup_timeout_sec).toBeGreaterThanOrEqual(30);
     expect(typeof cfg.mcp_servers.agentsid.tool_timeout_sec).toBe("number");
   });
 
