@@ -180,6 +180,13 @@ function UsageBanner({ usagePct, usageLabel, onSettingsClick }: UsageBannerProps
   const isCritical = usagePct > USAGE_CRITICAL_THRESHOLD * 100;
   const pctDisplay = Math.round(usagePct);
 
+  // Consequence copy depends on which limit is hitting — event caps
+  // reject new /validate calls; agent caps block new agent creation.
+  const criticalConsequence =
+    usageLabel === "agents"
+      ? "New agents may be rejected at creation."
+      : "New events may be rejected.";
+
   return (
     <div
       className={`flex items-center justify-between gap-3 px-4 py-3 rounded-xl mb-6 text-sm font-medium ${
@@ -192,7 +199,7 @@ function UsageBanner({ usagePct, usageLabel, onSettingsClick }: UsageBannerProps
         <span className="shrink-0">{isCritical ? "\u26A0" : "\u26A0"}</span>
         <span className="truncate">
           {isCritical
-            ? `You're almost at your ${usageLabel} limit (${pctDisplay}%). New events may be rejected.`
+            ? `You're almost at your ${usageLabel} limit (${pctDisplay}%). ${criticalConsequence}`
             : `You've used ${pctDisplay}% of your monthly ${usageLabel}. Upgrade to avoid interruptions.`}
         </span>
       </div>
@@ -280,9 +287,14 @@ function OverviewTab({
     [agents],
   );
 
-  // Usage percentages for plan limit warnings
+  // Usage percentages for plan limit warnings.
+  //
+  // Agent limit counts ACTIVE agents only, matching server-side enforcement
+  // in usage.py::check_agent_limit (`Agent.status == "active"`). Counting
+  // expired agents here caused the banner to fire at 144% while the server
+  // would happily accept new agents up to the real cap.
   const eventUsagePct = (totalEvents / FREE_PLAN_EVENT_LIMIT) * 100;
-  const agentUsagePct = (totalAgents / FREE_PLAN_AGENT_LIMIT) * 100;
+  const agentUsagePct = (activeCount / FREE_PLAN_AGENT_LIMIT) * 100;
 
   const handleConstellationClick = useCallback(
     (_agentId: string) => {
